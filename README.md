@@ -175,7 +175,9 @@ Path: “/findplace”
 
 ​    String  description;
 
-​    File  file;(图片、文本或视频文件);
+​    List<File>  file;(图片、文本或视频文件);
+
+​    String  city;
 
 ​    String  max_price;
 
