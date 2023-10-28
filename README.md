@@ -30,12 +30,12 @@ public class GoodPlace {
     private String type;
     private String topic_name;
     private String description;
-    private String file_dir;
+    private List<MultipartFile> files;
     private String max_price;
     private String end_time;
     private String create_time;
     private String change_time;
-    private String state;
+    private String state;//0表示已发布还未响应   1表示已响应还未接受  2表示已接受响应
 }
 ```
 
@@ -47,10 +47,10 @@ public class Welcome {
     private String request_id;
     private String user_id;
     private String description;
-    private String file_dir;
+    private List<MultipartFile> files;
     private String create_time;
     private String change_time;
-    private String state;
+    private String state;//0表示已发布响应还未接受  1表示响应已被请求方接受
 }
 ```
 
@@ -58,9 +58,9 @@ Result类(用于向前端返回数据)：//返回的结果都是一个Result对�
 
 ```
 public class Result {
-    private Integer code;//1代表成功，0代表失败
+    private int code;//1代表成功，0代表失败
     private String msg;//详细的错误信息
-    private Object data;//执行成功返回的数据信息
+    private Object data;//执行成功返回的数据信息  具体的返回类见具体接口
     }
     
 ```
@@ -69,7 +69,7 @@ public class Result {
 
 ```
 public class Statistics {
-    private String date;//YYYYMM
+    private String date;//YYYY/MM
     private String count;//成交数量
     private String agency_fee;
     }
@@ -159,6 +159,29 @@ return:
 
 }
 
+##### 4.完善个人信息：
+
+Path:"/information_update"//注册完成之后调用一次，确定用户信息
+
+{
+
+​	 String user_id;
+
+	 String user_name;//用户名
+	 String password;
+	 String user_type;
+	 String name;//姓名
+	 String identity_type;
+	 String identity_id;
+	 String phone_num;
+	 String user_rank;
+	 String description;
+	 String register_city;//具体到省市
+
+}
+
+
+
 #### 寻去处业务接口
 
 ##### 1.发布寻去处：
@@ -169,13 +192,13 @@ Path: “/findplace”
 
 ​    String  user_id;
 
-​    String  type;
+​    String  type;//地方类型
 
-​    String  topic_name;
+​    String  topic_name;//主题名称
 
 ​    String  description;
 
-​    List<File>  file;(图片、文本或视频文件);
+​	List<MultipartFile> files;上传的图片、视频或其他文件
 
 ​    String  city;
 
@@ -193,13 +216,13 @@ return:
 
    String msg;
 
-   GoodPlace data;
+   GoodPlace data;//返回刚刚发布的寻去处信息
 
 }
 
 ##### 2.查询发布的请求信息:(按类型、创建时间、修改时间、截止时间查询)
 
-Path: "/query"
+Path: "/query_request"
 
 {
 
@@ -223,17 +246,15 @@ return:
 
    String msg;
 
-   GoodPlace[] data;//可能为空
+   List<GoodPlace> data;//可能为空
 
 }
 
 ##### 3.查询用户发布的请求信息的响应信息
 
-Path: ""
+Path: "/query_response_by_requestid"
 
 {
-
-   String  user_id;
 
    String  request_id;
 
@@ -247,19 +268,33 @@ return:
 
    String msg;
 
-   Welcome[]  data;
+   List<Welcome>  data;
 
 }
 
 ##### 4.用户修改已发布还没有响应的请求信息
 
-Path: ""
+Path: "/request_update"
 
 {
 
    String  user_id;
 
    String  requset_id;
+
+   String  type;//地方类型
+
+​    String  topic_name;//主题名称
+
+​    String  description;
+
+​	List<MultipartFile> files;上传的图片、视频或其他文件
+
+​    String  city;
+
+​    String  max_price;
+
+​    String  end_time;
 
 }
 
@@ -271,13 +306,13 @@ return:
 
    String msg;
 
-   GoodPlace  data;
+   GoodPlace  data;//修改成功返回数据信息，修改失败为null
 
 }
 
 ##### 5.用户删除已发布还没有响应的请求信息
 
-Path: ""
+Path: "request_delete"
 
 {
 
@@ -301,7 +336,7 @@ return:
 
 ##### 6.用户查询所有的请求信息
 
-Path: ""
+Path: "query_request_by_user_id"
 
 {
 
@@ -317,9 +352,11 @@ return:
 
    String msg;
 
-   Welcome[]  data;
+   LIst<GoodPlace>  data;
 
 }
+
+
 
 
 
@@ -329,7 +366,7 @@ return:
 
 ##### 1.按地域查询所有的请求信息：
 
-Path: ""
+Path: "/query_request_by_city"
 
 {
 
@@ -345,17 +382,15 @@ return:
 
    String msg;
 
-   Goodplace[]  data;
+   List<Goodplace>  data;
 
 }
 
 ##### 2.提交欢迎来的响应信息：
 
-Path: ""
+Path: "/response"
 
 {
-
-   String response_id;
 
    String request_id;
 
@@ -363,7 +398,7 @@ Path: ""
 
    String description;
 
-   File[]   file;//所有文本、图片和视频文件
+   List<MultipartFile>   files;//所有文本、图片和视频文件
 
 }
 
@@ -381,7 +416,7 @@ return:
 
 ##### 3.修改自己已提交但未接受的响应：
 
-Path: ""
+Path: "/response_update"
 
 {
 
@@ -391,7 +426,7 @@ Path: ""
 
    String description;
 
-   File[]   file;//所有文本、图片和视频文件
+   List<MultipartFile>   files;//所有文本、图片和视频文件
 
 }
 
@@ -409,7 +444,7 @@ return:
 
 ##### 4.删除自己已提交但未接受的响应：
 
-Path: ""
+Path: "response_delete"
 
 {
 
@@ -437,7 +472,7 @@ return:
 
 ##### 1.按起始年月、终止年月、某个地域不同类型请求查询达成中介费、笔数的明细
 
-Path: ""
+Path: "query_profit"
 
 {
 
@@ -459,17 +494,19 @@ return:
 
    String msg;
 
-   String[]  data;(包含中介费和笔数  按顺序)
+   LIst<String>  data;(包含中介费和笔数  按顺序)
 
 }
 
 ##### 2.按月份查询中介费、笔数的明细（默认显示近3个月的统计结果）
 
-Path: ""
+Path: "query_profit_by_month"
 
 {
 
-​     int month;//最近的几个月,数字代表该月之前的几个月这段时间，包括该月份
+​     String  start_time;YYYY/MM
+
+​     String  end_time;YYYY/MM
 
 }
 
@@ -481,7 +518,7 @@ return:
 
    String msg;
 
-   Statistics[]  data;
+   List<Statistics>  data;
 
 }
 
