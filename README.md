@@ -69,7 +69,7 @@ public class Result {
 
 ```
 public class Statistics {
-    private String date;//YYYY/MM
+    private String date;//YYYY-MM
     private String count;//成交数量
     private String agency_fee;
     }
@@ -168,7 +168,6 @@ Path:"/information_update"//注册完成之后调用一次，确定用户信息
 ​	 String user_id;
 
 	 String user_name;//用户名
-	 String password;
 	 String user_type;
 	 String name;//姓名
 	 String identity_type;
@@ -230,9 +229,9 @@ Path: "/query_request"
 
    String  type;
 
-   String  create_time;
+​	String topic_name;
 
-   String  change_time;
+   String  create_time;
 
    String  end_time;
 
@@ -504,9 +503,9 @@ Path: "query_profit_by_month"
 
 {
 
-​     String  start_time;YYYY/MM
+​     String  start_time;YYYY-MM
 
-​     String  end_time;YYYY/MM
+​     String  end_time;YYYY-MM
 
 }
 
