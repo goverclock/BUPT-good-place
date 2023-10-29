@@ -1,5 +1,16 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+  <hr>
+    This is an about page
+    <br>
+    <el-button @click="incCount">Add</el-button>
 </template>
+
+<script setup>
+  import { useStore } from 'vuex';
+  const store = useStore();
+  let count = 3;
+  function incCount() {
+    count++;
+    store.commit('increase', count)
+  }
+</script>

@@ -1,24 +1,23 @@
 <template>
-  <img src="./assets/logo.png">
-  <div>
-    <p>
-      If Element Plus is successfully added to this project, you'll see an
-      <code v-text="'<el-button>'"></code>
-      below
-    </p>
-    <el-button type="primary">el-button</el-button>
+  <div id="nav">
+    <router-link to="/">Home</router-link>
+    <router-link to="/about">About</router-link>
   </div>
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <el-button type="primary" @click="showMsg">按钮</el-button>
+  <hr />
+  <el-icon :size="36" :color="color">
+    <edit></edit>
+  </el-icon>
+  <hr />
+
+  <el-config-provider :locale="zhCn">
+    <router-view></router-view>
+  </el-config-provider>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+<script setup>
+const showMsg = () => {
+  ElMessageBox.alert('你好！', '提示')
 }
 </script>
 
