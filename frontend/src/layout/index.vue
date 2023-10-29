@@ -1,11 +1,11 @@
 <template>
   <div class="page-container">
     <header>
-      <page-header />
+      <PageHeader />
     </header>
     <main>
       <div v-if="showLeft" class="left">
-        <page-sidebar></page-sidebar>
+        <PageSidebar></PageSidebar>
       </div>
       <div class="right">
         <router-view></router-view>

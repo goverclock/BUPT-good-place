@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-
+  import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 </script>
 
 <style>
@@ -17,5 +17,15 @@ body {
 #app {
   height: 100%;
   overflow: hidden;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cursor {
+  cursor: pointer;
 }
 </style>
