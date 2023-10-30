@@ -5,8 +5,9 @@
 
 <script setup>
 import axios from 'axios'
+import config from '../../request/config'
 function textAxios() {
-  axios.get('http://localhost:8080/')
+  axios.get('/test/', {...config})
     .then(res => {
       alert(res.data);
     })
