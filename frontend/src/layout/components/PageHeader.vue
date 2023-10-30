@@ -8,18 +8,23 @@
         <div class="right flex-center">
             <template v-if="isLogin">
                 <div class="gap">
-                    <router-link to="/personal/message"><el-icon>
-                            <message />
-                        </el-icon></router-link>
+                    <router-link to="/personal/message">
+                        <el-badge :is-dot="!!unReadCount">
+                            <el-icon>
+                                <message />
+                            </el-icon>
+                        </el-badge>
+                    </router-link>
                 </div>
-                <el-dropdown trigger="click">
+                <el-dropdown trigger="click" @command="handleCommand">
                     <div class="flex-center cursor">
-                        {{ username }}<el-icon><caret-bottom /></el-icon>
+                        {{ username }}
+                        <el-icon><caret-bottom /></el-icon>
                     </div>
                     <template #dropdown>
                         <el-dropdown-menu>
-                            <el-dropdown-item>个人中心</el-dropdown-item>
-                            <el-dropdown-item>退出</el-dropdown-item>
+                            <el-dropdown-item command="toPersonal">个人中心</el-dropdown-item>
+                            <el-dropdown-item divided command="toLogout">退出</el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
@@ -32,9 +37,25 @@
 </template>
 
 <script setup>
+const router = useRouter();
+const commands = ({
+    toPersonal: () => {
+        router.push('/personal')
+    },
+    toLogout: () => {
+        console.log('退出登录')
+    }
+});
+
+function handleCommand(cmd) {
+    commands[cmd] && commands[cmd]();
+}
+
 const isLogin = ref(false)
 const username = ref('admin')
 isLogin.value = true;
+
+const unReadCount = ref(0)
 </script>
 
 <style lang="scss">
