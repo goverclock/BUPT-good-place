@@ -6,33 +6,6 @@ import router from "../router";
 export default function request(options) {
   return new Promise((resolve, reject) => {
     const instance = axios.create({ ...config });
-    // request 请求拦截器
-    instance.interceptors.request.use(
-      (config) => {
-        let token = localStorage.getItem("pm_token");
-        // 发送请求时携带token
-        if (token) {
-          config.headers.token = token;
-        } else {
-          router.push("/login");
-        }
-        return config;
-      },
-      (error) => {
-        // 请求发生错误时
-        console.log("request:", error);
-        // 判断请求超时
-        if (
-          error.code === "ECONNABORTED" &&
-          error.message.indexOf("timeout") !== -1
-        ) {
-          ElMessage({ message: "请求超时", type: "error", showClose: true });
-        }
-
-        return Promise.reject(error);
-      }
-    );
-
     // response 响应拦截器
     instance.interceptors.response.use(
       (response) => {
@@ -41,6 +14,9 @@ export default function request(options) {
       (err) => {
         if (err && err.response) {
           switch (err.response.status) {
+            case 0:
+              err.message = "unknown error";
+              break;
             case 400:
               err.message = "请求错误";
               break;
@@ -77,6 +53,7 @@ export default function request(options) {
             default:
           }
         }
+
         console.error(err);
         if (err.message) {
           ElMessage({ message: err.message, type: "error", showClose: true });
@@ -84,28 +61,14 @@ export default function request(options) {
         return Promise.reject(err); // 返回接口返回的错误信息
       }
     );
+
     // 请求处理
     instance(options)
       .then((res) => {
-        /**
-         * response 统一格式
-         * {
-         *    code: 200,
-         *    msg: '消息[String]',
-         *    data: '返回数据[Any]'
-         * }
-         * code说明：
-         * 200 成功
-         * -1 失败，可能网络不通，可能后台服务异常或其它异常
-         * -2 登录失效跳回登录
-         */
+        console.log("instance res:", res)
         if (res.code === 200) {
           resolve(res);
         } else {
-          // 未登录
-          if (res.code === -2) {
-            router.push("/login");
-          }
           ElMessage({ message: res.msg || "操作失败", type: "error", showClose: true });
           reject(res);
         }
