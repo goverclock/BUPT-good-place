@@ -1,8 +1,8 @@
 import request from '../request/index'
 
-export const LoginReq = (d) => {
+export const RegisterReq = (d) => {
     return request({
-        url: 'load',
+        url: 'register',
         method: 'post',
         data: d,
     });

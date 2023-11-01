@@ -10,7 +10,8 @@
           <el-input v-model="form.password" type="password" placeholder="密码" prefix-icon="lock"></el-input>
         </el-form-item>
         <el-form-item label>
-          <el-button type="primary" :loading="loading" class="w100p" @click="doLogin">登录</el-button>
+          <el-button type="primary" :loading="loginLoading" class="w100p" @click="doLogin">登录</el-button>
+          <el-button type="default" :loading="registerLoading" class="w100p" @click="doRegister">注册</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -19,7 +20,8 @@
 
 <script setup>
 // import axios from 'axios';
-import { loginReq } from '../../apis/login'
+import { LoginReq } from '../../apis/login'
+import { RegisterReq } from '../../apis/register'
 // const router = useRouter();
 const formRef = ref();
 const form = reactive({
@@ -50,31 +52,49 @@ const rules = computed(() => {
   }
 });
 
-const loading = ref(false)
+const loginLoading = ref(false)
+const registerLoading = ref(false)
 const store = useStore();
 function doLogin() {
   formRef.value.validate((valid) => {
     if (!valid) return;
-    loading.value = true;
+    loginLoading.value = true;
     let data = {
       user_id: form.account,
       password: form.password,
     }
 
-    loginReq(data)
+    LoginReq(data)
       .then((res) => {
-        console.log("loginReq OK:", res.data)
+        console.log("LoginReq OK:", res.data)
         // store.commit('user/setToken', res.data.token);
         // store.dispatch('user/refreshInfo');
         // store.commit("setRouteLoaded", false);
         // localStorage.setItem('pm_token', res.data.token)
         // router.push("/");
       }).catch(err => {
-        console.log("loginReq error:", err)
+        console.log("LoginReq error:", err)
       }).finally(() => {
-        loading.value = false;
+        loginLoading.value = false;
       })
   });
+}
+
+function doRegister() {
+  registerLoading.value = true;
+  let data = {
+    user_id: form.account,
+    password: form.password,
+  }
+
+  RegisterReq(data)
+    .then((res) => {
+      console.log("RegisterReq OK:", res.data)
+    }).catch(err => {
+      console.log("RegisterReq error:", err)
+    }).finally(() => {
+      registerLoading.value = false;
+    })
 }
 </script>
 
