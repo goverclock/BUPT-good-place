@@ -43,8 +43,8 @@ const rules = computed(() => {
     ],
     password: {
       required: true,
-      min: 4,
-      message: "请输入至少4个字符但密码",
+      min: 0,
+      // message: "请输入至少4个字符的密码",
       trigger: ["change", "blur"],
     },
   }

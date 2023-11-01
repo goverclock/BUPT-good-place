@@ -56,7 +56,7 @@ export default function request(options) {
 
         console.error(err);
         if (err.message) {
-          ElMessage({ message: err.message, type: "error", showClose: true });
+          ElMessage({ message: err.message, type: "error" });
         }
         return Promise.reject(err); // 返回接口返回的错误信息
       }
@@ -66,10 +66,10 @@ export default function request(options) {
     instance(options)
       .then((res) => {
         console.log("instance res:", res)
-        if (res.code === 200) {
+        if (res.code === 1) {
           resolve(res);
         } else {
-          ElMessage({ message: res.msg || "操作失败", type: "error", showClose: true });
+          ElMessage({ message: res.msg || "操作失败", type: "error", showClose: false });
           reject(res);
         }
       })
