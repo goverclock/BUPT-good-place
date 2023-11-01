@@ -4,6 +4,8 @@ import router from './router'
 import store from './store'
 import * as ElIcons from '@element-plus/icons-vue'
 import 'normalize.css'
+import 'element-plus/es/components/message/style/css';
+import 'element-plus/es/components/message-box/style/css';
 
 const app = createApp(App)
 for (const name in ElIcons) {
