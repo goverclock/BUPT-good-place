@@ -81,7 +81,7 @@ public class Statistics {
 
 #### User接口：
 
-##### 1.注册：(待定是否注册时直接完善用户信息)
+##### 1.注册：(待定是否注册时直接完善用户信息) 已实现
 
  Path: “/register”
 
@@ -105,7 +105,7 @@ return:
 
 }
 
-##### 2.登录：
+##### 2.登录： 已实现
 
 Path: “/load”
 
@@ -129,7 +129,7 @@ return:
 
 }
 
-##### 3.修改信息：
+##### 3.修改信息：已实现
 
 Path: “/update”
 
@@ -159,7 +159,7 @@ return:
 
 }
 
-##### 4.完善个人信息：
+##### 4.完善个人信息：已实现
 
 Path:"/information_update"//注册完成之后调用一次，确定用户信息
 
@@ -183,7 +183,7 @@ Path:"/information_update"//注册完成之后调用一次，确定用户信息
 
 #### 寻去处业务接口
 
-##### 1.发布寻去处：
+##### 1.发布寻去处：已实现（表单提交）
 
 Path: “/findplace”
 
@@ -219,7 +219,7 @@ return:
 
 }
 
-##### 2.查询发布的请求信息:(按类型、创建时间、修改时间、截止时间查询)
+##### 2.查询发布的请求信息:(按类型、创建时间、修改时间、截止时间查询) 已实现
 
 Path: "/query_request"
 
@@ -249,7 +249,7 @@ return:
 
 }
 
-##### 3.查询用户发布的请求信息的响应信息
+##### 3.查询用户发布的请求信息的响应信息 已实现待完善（返回的只是文件路径）
 
 Path: "/query_response_by_requestid"
 
@@ -271,13 +271,11 @@ return:
 
 }
 
-##### 4.用户修改已发布还没有响应的请求信息
+##### 4.用户修改已发布还没有响应的请求信息   已完成（表单提交）
 
-Path: "/request_update"
+Path: "/request_update"  
 
 {
-
-   String  user_id;
 
    String  requset_id;
 
@@ -309,13 +307,11 @@ return:
 
 }
 
-##### 5.用户删除已发布还没有响应的请求信息
+##### 5.用户删除已发布还没有响应的请求信息   已完成
 
 Path: "request_delete"
 
 {
-
-   String  user_id;
 
    String  requset_id;
 
@@ -333,7 +329,7 @@ return:
 
 }
 
-##### 6.用户查询所有的请求信息
+##### 6.用户查询所有的请求信息  已实现待完善
 
 Path: "query_request_by_user_id"
 
@@ -363,7 +359,7 @@ return:
 
 #### 欢迎来业务接口：
 
-##### 1.按地域查询所有的请求信息：
+##### 1.按地域查询所有的请求信息：已实现待完善（但是不是返回文件，返回文件路径）
 
 Path: "/query_request_by_city"
 
@@ -385,7 +381,7 @@ return:
 
 }
 
-##### 2.提交欢迎来的响应信息：
+##### 2.提交欢迎来的响应信息：已实现（表单提交）
 
 Path: "/response"
 
@@ -413,15 +409,13 @@ return:
 
 }
 
-##### 3.修改自己已提交但未接受的响应：
+##### 3.修改自己已提交但未接受的响应： 已完成（表单提交）
 
 Path: "/response_update"
 
 {
 
    String response_id;
-
-   String user_id;//用户自身的id
 
    String description;
 
@@ -441,15 +435,13 @@ return:
 
 }
 
-##### 4.删除自己已提交但未接受的响应：
+##### 4.删除自己已提交但未接受的响应：已完成
 
 Path: "response_delete"
 
 {
 
    String response_id;
-
-   String user_id;//用户自身的id
 
 }
 
