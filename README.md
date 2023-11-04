@@ -30,7 +30,7 @@ public class GoodPlace {
     private String type;
     private String topic_name;
     private String description;
-    private List<MultipartFile> files;
+    private List<String> files;
     private String max_price;
     private String end_time;
     private String create_time;
@@ -47,7 +47,7 @@ public class Welcome {
     private String request_id;
     private String user_id;
     private String description;
-    private List<MultipartFile> files;
+    private List<String> files;
     private String create_time;
     private String change_time;
     private String state;//0表示已发布响应还未接受  1表示响应已被请求方接受
@@ -125,7 +125,7 @@ return:
 
    String msg;
 
-   User data;//返回用户信息
+   String token;
 
 }
 
@@ -348,6 +348,28 @@ return:
    String msg;
 
    LIst<GoodPlace>  data;
+
+}
+
+##### 7.用户接受欢迎来的响应   已实现
+
+Path:"accept_response"  
+
+{
+
+​	String response_id;
+
+}
+
+return:
+
+{
+
+​	in code;
+
+​	String msg;//成功或失败
+
+​	data null;
 
 }
 
