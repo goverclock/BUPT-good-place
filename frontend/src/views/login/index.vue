@@ -22,7 +22,6 @@
 // import axios from 'axios';
 import { LoginReq } from '../../apis/login'
 import { RegisterReq } from '../../apis/register'
-// const router = useRouter();
 const formRef = ref();
 const form = reactive({
   account: "",
@@ -55,6 +54,8 @@ const rules = computed(() => {
 const loginLoading = ref(false)
 const registerLoading = ref(false)
 const store = useStore();
+const router = useRouter();
+
 function doLogin() {
   formRef.value.validate((valid) => {
     if (!valid) return;
@@ -67,11 +68,11 @@ function doLogin() {
     LoginReq(data)
       .then((res) => {
         console.log("LoginReq OK:", res.data)
-        // store.commit('user/setToken', res.data.token);
+        store.commit('user/setToken', res.data);  // token
         // store.dispatch('user/refreshInfo');
         // store.commit("setRouteLoaded", false);
-        // localStorage.setItem('pm_token', res.data.token)
-        // router.push("/");
+        localStorage.setItem('pm_token', res.data)
+        router.push("/");
       }).catch(err => {
         console.log("LoginReq error:", err)
       }).finally(() => {
