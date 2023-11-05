@@ -20,8 +20,7 @@
 
 <script setup>
 // import axios from 'axios';
-import { LoginReq } from '../../apis/login'
-import { RegisterReq } from '../../apis/register'
+import { LoginReq, RegisterReq } from '@/request/api'
 const formRef = ref();
 const form = reactive({
   account: "",
@@ -67,6 +66,7 @@ function doLogin() {
 
     LoginReq(data)
       .then((res) => {
+        ElMessage({ message: "登录成功!", type: "success" });
         console.log("LoginReq OK:", res.data)
         store.commit('user/setToken', res.data);  // token
         // store.dispatch('user/refreshInfo');

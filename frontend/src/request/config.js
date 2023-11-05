@@ -7,6 +7,7 @@ export default {
   // 请求头信息
   headers: {
     'Content-Type': 'application/json',
+    'token': localStorage.getItem('pm_token'),
   },
   // 设置超时时间
   timeout: 10000,
