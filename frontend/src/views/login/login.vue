@@ -11,7 +11,7 @@
         </el-form-item>
         <el-form-item label>
           <el-button type="primary" :loading="loginLoading" class="w100p" @click="doLogin">登录</el-button>
-          <el-button type="default" :loading="registerLoading" class="w100p" @click="doRegister">注册</el-button>
+          <el-link type="primary" href="/#/register" class="w100p">还没有账号?去注册</el-link>
         </el-form-item>
       </el-form>
     </div>
@@ -122,4 +122,9 @@ function doRegister() {
   margin-bottom: 10px;
   color: #000;
 }
+
+.w100p {
+  width: 50%;
+}
+
 </style>

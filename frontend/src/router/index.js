@@ -10,7 +10,12 @@ const routes = [
       {
         path: "login",
         name: "Login",
-        component: () => import('@/views/login/index.vue'),
+        component: () => import('@/views/login/login.vue'),
+      },
+      {
+        path: "register",
+        name: "Register",
+        component: () => import('@/views/register/register.vue'),
       },
       {
         path: "404",
