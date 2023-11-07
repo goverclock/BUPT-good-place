@@ -11,16 +11,16 @@
         </el-form-item>
         <el-form-item label>
           <el-button type="primary" :loading="loginLoading" class="w100p" @click="doLogin">登录</el-button>
-          <el-link type="primary" href="/#/register" class="w100p">还没有账号?去注册</el-link>
         </el-form-item>
       </el-form>
+      <br>
+      <el-link type="primary" href="/#/register" class="float-right">还没有账号?去注册</el-link>
     </div>
   </div>
 </template>
 
 <script setup>
-// import axios from 'axios';
-import { LoginReq, RegisterReq } from '@/request/api'
+import { LoginReq } from '@/request/api'
 const formRef = ref();
 const form = reactive({
   account: "",
@@ -43,15 +43,14 @@ const rules = computed(() => {
     ],
     password: {
       required: true,
-      min: 0,
-      // message: "请输入至少4个字符的密码",
+      min: 1,
+      message: "请输入密码",
       trigger: ["change", "blur"],
     },
   }
 });
 
 const loginLoading = ref(false)
-const registerLoading = ref(false)
 const store = useStore();
 const router = useRouter();
 
@@ -80,23 +79,6 @@ function doLogin() {
       })
   });
 }
-
-function doRegister() {
-  registerLoading.value = true;
-  let data = {
-    user_id: form.account,
-    password: form.password,
-  }
-
-  RegisterReq(data)
-    .then((res) => {
-      console.log("RegisterReq OK:", res.data)
-    }).catch(err => {
-      console.log("RegisterReq error:", err)
-    }).finally(() => {
-      registerLoading.value = false;
-    })
-}
 </script>
 
 <style lang="scss">
@@ -124,7 +106,10 @@ function doRegister() {
 }
 
 .w100p {
-  width: 50%;
+  width: 100%;
 }
 
+.float-right {
+  float: right;
+}
 </style>
