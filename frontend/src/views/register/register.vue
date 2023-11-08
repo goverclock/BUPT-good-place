@@ -12,10 +12,18 @@
                                 <el-form-item label="联系电话" prop="tele">
                                         <el-input v-model="form.tele"></el-input>
                                 </el-form-item>
+                                <el-form-item label="地区" prop="city">
+                                        <el-cascader ref="cascaderAddr" :options="options" :props="city" placeholder="请选择省市区"
+                                                @change="handleAddrChange"></el-cascader>
+                                </el-form-item>
+                                <el-form-item label="个人简介" prop="desc">
+                                        <el-input v-model="form.desc" type="textarea"></el-input>
+                                </el-form-item>
                                 <el-form-item label>
                                         <el-button type="primary" :loading="registerLoading" class="w100p"
                                                 @click="doRegister">注册</el-button>
                                 </el-form-item>
+
                         </el-form>
                         <br>
                         <el-link type="primary" href="/#/login" class="float-right">已有账号?在这里登录</el-link>
@@ -25,15 +33,29 @@
 
 <script setup>
 import { RegisterReq } from '@/request/api'
+import cityData from '@/assets/pca-code.json'
+
+let options = cityData
+let city = {
+        value: 'code',
+        label: 'name',
+        children: 'children',
+}
+const cascaderAddr = ref()
+function handleAddrChange(e) {
+        let addrNode = unref(cascaderAddr).getCheckedNodes()[0]
+        let addrText = addrNode.pathLabels.join("-")
+        form.city = addrText
+}
+
 const formRef = ref();
 const form = reactive({
         account: "",
         password: "",
+        tele: "",
+        desc: "",
+        city: "",
 })
-
-// const validateTele = (rule, value, callback) => {
-//         callback()
-// }
 
 const rules = computed(() => {
         return {
@@ -63,12 +85,19 @@ const rules = computed(() => {
                 },
                 tele: {
                         required: true,
-                        // message: "请输入有效的11位电话号码",
                         validator: (rule, value, callback) => {
                                 if (!/^\d{11}$/.test(value)) {
                                         return callback(new Error("请输入有效的11位电话号码"))
                                 }
                         },
+                        trigger: ["change", "blur"],
+                },
+                desc: {
+                        required: false,
+                        trigger: ["change", "blur"],
+                },
+                city: {
+                        required: true,
                         trigger: ["change", "blur"],
                 }
         }
@@ -79,6 +108,8 @@ const store = useStore();
 const router = useRouter();
 
 function doRegister() {
+        console.log("form is:", form)
+
         registerLoading.value = true;
         let data = {
                 user_id: form.account,
