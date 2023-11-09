@@ -61,7 +61,7 @@ public class Result {
     private int code;//1代表成功，0代表失败
     private String msg;//详细的错误信息
     private Object data;//执行成功返回的数据信息  具体的返回类见具体接口
-    }
+}
     
 ```
 
@@ -70,9 +70,9 @@ public class Result {
 ```
 public class Statistics {
     private String date;//YYYY-MM
-    private String count;//成交数量
-    private String agency_fee;
-    }
+    private long count;//成交数量
+    private long agency_fee;
+}
 ```
 
 
@@ -135,15 +135,15 @@ Path: “/update”
 
 { 
 
-  String user_id;
+​	String user_id;
 
-  String password;
+​	String password;
 
-  String new_password; 
+​	String new_password; 
 
-  String phone_num;
+​    String phone_num;
 
-  String description;
+​    String description;
 
  }
 
@@ -151,11 +151,11 @@ return:
 
 {
 
-   int code;
+​	int code;
 
-   String msg;
+​    String msg;
 
-   User data;//返回修改后的用户信息
+​    User data;//返回修改后的用户信息
 
 }
 
@@ -255,7 +255,7 @@ Path: "/query_response_by_requestid"
 
 {
 
-   String  request_id;
+​	String  request_id;
 
 }
 
@@ -263,11 +263,11 @@ return:
 
 {
 
-   int code;
+​	 int code;
 
-   String msg;
+​     String msg;
 
-   List<Welcome>  data;
+​     List<Welcome>  data;
 
 }
 
@@ -277,9 +277,9 @@ Path: "/request_update"
 
 {
 
-   String  requset_id;
+​    String  requset_id;
 
-   String  type;//地方类型
+​    String  type;//地方类型
 
 ​    String  topic_name;//主题名称
 
@@ -313,7 +313,7 @@ Path: "request_delete"
 
 {
 
-   String  requset_id;
+​    String  requset_id;
 
 }
 
@@ -321,11 +321,11 @@ return:
 
 {
 
-   int code;
+​    int code;
 
-   String msg;
+​    String msg;
 
-   null;
+​    null;
 
 }
 
@@ -335,7 +335,7 @@ Path: "query_request_by_user_id"
 
 {
 
-   String  user_id;
+​    String  user_id;
 
 }
 
@@ -343,11 +343,11 @@ return:
 
 {
 
-   int code;
+​    int code;
 
-   String msg;
+​    String msg;
 
-   LIst<GoodPlace>  data;
+​    LIst<GoodPlace>  data;
 
 }
 
@@ -357,7 +357,7 @@ Path:"accept_response"
 
 {
 
-​	String response_id;
+ 	String response_id;
 
 }
 
@@ -365,11 +365,11 @@ return:
 
 {
 
-​	in code;
+ 	in code;
 
-​	String msg;//成功或失败
+ 	String msg;//成功或失败
 
-​	data null;
+ 	data null;
 
 }
 
@@ -387,7 +387,7 @@ Path: "/query_request_by_city"
 
 {
 
-   String  city;
+​	String  city;
 
 }
 
@@ -395,11 +395,11 @@ return:
 
 {
 
-   int code;
+​    int code;
 
-   String msg;
+​    String msg;
 
-   List<Goodplace>  data;
+​    List<Goodplace>  data;
 
 }
 
@@ -409,13 +409,13 @@ Path: "/response"
 
 {
 
-   String request_id;
+​	String request_id;
 
-   String user_id;//用户自身的id
+​    String user_id;//用户自身的id
 
-   String description;
+​    String description;
 
-   List<MultipartFile>   files;//所有文本、图片和视频文件
+​    List<MultipartFile>   files;//所有文本、图片和视频文件
 
 }
 
@@ -423,11 +423,11 @@ return:
 
 {
 
-   int code;
+​    int code;
 
-   String msg;
+​    String msg;
 
-   Welcome  data;
+​    Welcome  data;
 
 }
 
@@ -437,11 +437,11 @@ Path: "/response_update"
 
 {
 
-   String response_id;
+​	String response_id;
 
-   String description;
+​    String description;
 
-   List<MultipartFile>   files;//所有文本、图片和视频文件
+​    List<MultipartFile>   files;//所有文本、图片和视频文件
 
 }
 
@@ -449,11 +449,11 @@ return:
 
 {
 
-   int code;
+​    int code;
 
-   String msg;
+​    String msg;
 
-   Welcome  data;
+​    Welcome  data;
 
 }
 
@@ -463,7 +463,7 @@ Path: "response_delete"
 
 {
 
-   String response_id;
+​	String response_id;
 
 }
 
@@ -471,11 +471,11 @@ return:
 
 {
 
-   int code;
+​    int code;
 
-   String msg;
+​    String msg;
 
-   null;
+​    null;
 
 }
 
@@ -489,13 +489,13 @@ Path: "query_profit"
 
 {
 
-   String create_time;
+​	String start_time;
 
-   String end_time;
+​    String end_time;
 
-   String city;
+​    String city;
 
-   String type;
+​    String type;
 
 }
 
@@ -503,11 +503,11 @@ return:
 
 {
 
-   int code;
+​    int code;
 
-   String msg;
+​    String msg;
 
-   LIst<String>  data;(包含中介费和笔数  按顺序)
+​    LIst<String>  data;(包含中介费和笔数  按顺序)
 
 }
 
@@ -517,7 +517,7 @@ Path: "query_profit_by_month"
 
 {
 
-​     String  start_time;YYYY-MM
+ 	String  start_time;YYYY-MM
 
 ​     String  end_time;YYYY-MM
 
@@ -527,11 +527,11 @@ return:
 
 {
 
-   int code;
+​    int code;
 
-   String msg;
+​    String msg;
 
-   List<Statistics>  data;
+​    List<Statistics>  data;
 
 }
 
