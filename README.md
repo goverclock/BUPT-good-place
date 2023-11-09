@@ -91,6 +91,24 @@ public class Statistics {
 
    String password;
 
+​	String user_name;
+
+​	String user_type;
+
+​	String name;
+
+​	String identity_type;
+
+​	String identity_id;
+
+​	String phone_num;
+
+​	String user_rank;
+
+​	String description;
+
+​	String register_city;
+
 }
 
 return:
@@ -366,9 +384,9 @@ return:
 {
 
  	in code;
-
+ 	
  	String msg;//成功或失败
-
+ 	
  	data null;
 
 }
