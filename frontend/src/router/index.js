@@ -10,12 +10,20 @@ const routes = [
       {
         path: "login",
         name: "Login",
-        component: () => import('@/views/login/index.vue'),
+        component: () => import('@/views/login/login.vue'),
+        meta: { title: "登录" },
+      },
+      {
+        path: "register",
+        name: "Register",
+        component: () => import('@/views/register/register.vue'),
+        meta: { title: "注册" },
       },
       {
         path: "404",
         name: "NotFound",
         component: () => import('@/views/404.vue'),
+        meta: { title: "页面不存在" },
       },
       {
         path: "personal",
@@ -56,6 +64,12 @@ const routes = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes
-})
+});
+
+// set title for each page
+router.beforeEach((to, from, next) => {
+  document.title = (to.meta.title || "no title") + " - BUPT好去处"
+  next()
+});
 
 export default router

@@ -20,7 +20,7 @@ import PageSidebar from './components/PageSidebar.vue'
 const route = useRoute();
 const showLeft = computed(() => {
   const routeName = route.name;
-  return !['Login', 'NotFound'].includes(routeName) && !/^Personal/.test(routeName);
+  return !['Login', 'Register', 'NotFound'].includes(routeName) && !/^Personal/.test(routeName);
 })
 </script>
 
@@ -33,8 +33,8 @@ const showLeft = computed(() => {
 
   >header {
     height: 54px;
-    background: #000;
-    color: #fff;
+    background: #fff;
+    color: #000;
   }
 
   >main {

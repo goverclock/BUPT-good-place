@@ -11,17 +11,16 @@
         </el-form-item>
         <el-form-item label>
           <el-button type="primary" :loading="loginLoading" class="w100p" @click="doLogin">登录</el-button>
-          <el-button type="default" :loading="registerLoading" class="w100p" @click="doRegister">注册</el-button>
         </el-form-item>
       </el-form>
+      <br>
+      <el-link type="primary" href="/#/register" class="float-right">还没有账号?去注册</el-link>
     </div>
   </div>
 </template>
 
 <script setup>
-// import axios from 'axios';
-import { LoginReq } from '../../apis/login'
-import { RegisterReq } from '../../apis/register'
+import { LoginReq } from '@/request/api'
 const formRef = ref();
 const form = reactive({
   account: "",
@@ -36,29 +35,24 @@ const rules = computed(() => {
         message: "请输入用户名",
         trigger: ["change", "blur"],
       },
-      {
-        pattern: /^[a-zA-Z][a-zA-Z0-9_-]{3,31}$/,
-        message: "用户名由英文字母开头的长度为4-32位字母,_和-组成",
-        trigger: ["change", "blur"],
-      },
     ],
     password: {
       required: true,
-      min: 0,
-      // message: "请输入至少4个字符的密码",
+      min: 1,
+      message: "请输入密码",
       trigger: ["change", "blur"],
     },
   }
 });
 
 const loginLoading = ref(false)
-const registerLoading = ref(false)
 const store = useStore();
 const router = useRouter();
 
 function doLogin() {
   formRef.value.validate((valid) => {
     if (!valid) return;
+
     loginLoading.value = true;
     let data = {
       user_id: form.account,
@@ -67,6 +61,7 @@ function doLogin() {
 
     LoginReq(data)
       .then((res) => {
+        ElMessage({ message: "登录成功!", type: "success" });
         console.log("LoginReq OK:", res.data)
         store.commit('user/setToken', res.data);  // token
         // store.dispatch('user/refreshInfo');
@@ -79,23 +74,6 @@ function doLogin() {
         loginLoading.value = false;
       })
   });
-}
-
-function doRegister() {
-  registerLoading.value = true;
-  let data = {
-    user_id: form.account,
-    password: form.password,
-  }
-
-  RegisterReq(data)
-    .then((res) => {
-      console.log("RegisterReq OK:", res.data)
-    }).catch(err => {
-      console.log("RegisterReq error:", err)
-    }).finally(() => {
-      registerLoading.value = false;
-    })
 }
 </script>
 
@@ -121,5 +99,13 @@ function doRegister() {
   margin-top: 0;
   margin-bottom: 10px;
   color: #000;
+}
+
+.w100p {
+  width: 100%;
+}
+
+.float-right {
+  float: right;
 }
 </style>
