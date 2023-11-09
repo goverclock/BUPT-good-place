@@ -7,12 +7,12 @@ public class User {
     private String user_id;
     private String user_name;//用户名
     private String password;
-    private String user_type;
+    private String user_type;	// "user" - 普通用户, "admin" - 系统管理员
     private String name;//姓名
     private String identity_type;
     private String identity_id;
     private String phone_num;
-    private String user_rank;
+    private String user_rank; // "normal" - 一般用户, "VIP" - VIP用户
     private String description;
     private String register_city;
     private String register_time;
@@ -163,10 +163,9 @@ return:
 
 Path:"/information_update"//注册完成之后调用一次，确定用户信息
 
+```
 {
-
 ​	 String user_id;
-
 	 String user_name;//用户名
 	 String user_type;
 	 String name;//姓名
@@ -178,7 +177,7 @@ Path:"/information_update"//注册完成之后调用一次，确定用户信息
 	 String register_city;//具体到省市
 
 }
-
+```
 
 
 #### 寻去处业务接口
