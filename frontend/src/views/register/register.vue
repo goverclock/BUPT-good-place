@@ -13,7 +13,7 @@
                                         <el-input v-model="form.tele"></el-input>
                                 </el-form-item>
                                 <el-form-item label="地区" prop="city">
-                                        <el-cascader ref="cascaderAddr" :options="options" :props="city" placeholder="请选择省市区"
+                                        <el-cascader ref="cascaderAddr" :options="cityData" :props="city" placeholder="请选择地区"
                                                 @change="handleAddrChange"></el-cascader>
                                 </el-form-item>
                                 <el-form-item label="个人简介" prop="desc">
@@ -35,7 +35,16 @@
 import { RegisterReq } from '@/request/api'
 import cityData from '@/assets/pca-code.json'
 
-let options = cityData
+const formRef = ref();
+
+const form = reactive({
+        account: "",
+        password: "",
+        tele: "",
+        city: "",
+        desc: "",
+})
+
 let city = {
         value: 'code',
         label: 'name',
@@ -47,19 +56,14 @@ function handleAddrChange(e) {
         let addrText = addrNode.pathLabels.join("-")
         form.city = addrText
 }
-
-const formRef = ref();
-const form = reactive({
-        account: "",
-        password: "",
-        tele: "",
-        desc: "",
-        city: "",
-})
-
 const rules = computed(() => {
         return {
                 account: [
+                        {
+                                required: true,
+                                message: "请输入用户名",
+                                trigger: ["change", "blur"],
+                        },
                         {
                                 required: true,
                                 pattern: /^[a-zA-Z][a-zA-Z0-9_-]{3,11}$/,
@@ -89,17 +93,19 @@ const rules = computed(() => {
                                 if (!/^\d{11}$/.test(value)) {
                                         return callback(new Error("请输入有效的11位电话号码"))
                                 }
+                                callback()
                         },
+                        trigger: ["change", "blur"],
+                },
+                city: {
+                        required: true,
+                        message: "请选择地区",
                         trigger: ["change", "blur"],
                 },
                 desc: {
                         required: false,
                         trigger: ["change", "blur"],
                 },
-                city: {
-                        required: true,
-                        trigger: ["change", "blur"],
-                }
         }
 });
 
@@ -110,20 +116,28 @@ const router = useRouter();
 function doRegister() {
         console.log("form is:", form)
 
-        registerLoading.value = true;
-        let data = {
-                user_id: form.account,
-                password: form.password,
-        }
+        formRef.value.validate((valid) => {
+                if (!valid) return;
 
-        RegisterReq(data)
-                .then((res) => {
-                        console.log("RegisterReq OK:", res.data)
-                }).catch(err => {
-                        console.log("RegisterReq error:", err)
-                }).finally(() => {
-                        registerLoading.value = false;
-                })
+                registerLoading.value = true;
+                let data = {
+                        user_id: form.account,
+                        password: form.password,
+                }
+
+                RegisterReq(data)
+                        .then((res) => {
+                                ElMessage({ message: "注册成功!", type: "success" });
+                                console.log("Register success", res.data)
+                                router.push("/login")
+                        })
+                        .catch(err => {
+                                console.log("RegisterReq error", err)
+                        })
+                        .finally(() => {
+                                registerLoading.value = false;
+                        })
+        })
 }
 </script>
 

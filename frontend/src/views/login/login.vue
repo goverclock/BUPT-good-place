@@ -35,11 +35,6 @@ const rules = computed(() => {
         message: "请输入用户名",
         trigger: ["change", "blur"],
       },
-      {
-        pattern: /^[a-zA-Z][a-zA-Z0-9_-]{3,31}$/,
-        message: "用户名由英文字母开头的长度为4-32位字母,_和-组成",
-        trigger: ["change", "blur"],
-      },
     ],
     password: {
       required: true,
@@ -57,6 +52,7 @@ const router = useRouter();
 function doLogin() {
   formRef.value.validate((valid) => {
     if (!valid) return;
+
     loginLoading.value = true;
     let data = {
       user_id: form.account,

@@ -17,3 +17,11 @@ export function RegisterReq(d) {
         data: d,
     });
 };
+
+export function InformationUpdateReq(d) {
+    return request({
+        url: 'information_update',
+        method: 'post',
+        dataa: d,
+    })
+}
