@@ -123,10 +123,18 @@ function doRegister() {
                 let data = {
                         user_id: form.account,
                         password: form.password,
+                        user_name: form.account,
+                        user_type: "user",
+                        name: "",
+                        identity_type: "",
+                        identity_id: "",
+                        phone_num: form.tele,
+                        user_rank: "normal",
+                        description: form.desc,
+                        register_city: form.city,
                 }
-
                 RegisterReq(data)
-                        .then((res) => {
+                        .then(res => {
                                 ElMessage({ message: "注册成功!", type: "success" });
                                 console.log("Register success", res.data)
                                 router.push("/login")
@@ -137,6 +145,7 @@ function doRegister() {
                         .finally(() => {
                                 registerLoading.value = false;
                         })
+
         })
 }
 </script>
