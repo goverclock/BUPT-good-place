@@ -6,6 +6,7 @@ const routes = [
     path: '/',
     name: 'home',
     component: Layout,
+    meta: {title: "主页"},
     children: [
       {
         path: "login",
