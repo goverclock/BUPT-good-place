@@ -20,7 +20,7 @@ import PageSidebar from './components/PageSidebar.vue'
 const route = useRoute();
 const showLeft = computed(() => {
   const routeName = route.name;
-  return !['Login', 'Register', 'NotFound'].includes(routeName) && !/^Personal/.test(routeName);
+  return !['Login', 'Register', 'NotFound'].includes(routeName);
 })
 </script>
 
@@ -51,7 +51,7 @@ const showLeft = computed(() => {
     >.right {
       flex: 1;
       overflow: hidden;
-      background-color: #f5f7f9;
+      // background-color: #f5f7f9;
 
       >.main-body {
         padding: 16px 16px 30px;

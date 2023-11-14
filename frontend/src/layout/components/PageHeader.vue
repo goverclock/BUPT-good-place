@@ -40,7 +40,7 @@
 const router = useRouter();
 const commands = ({
     toPersonal: () => {
-        router.push('/personal')
+        router.push('/personal/detail')
     },
     toLogout: () => {
         console.log('退出登录')
