@@ -81,6 +81,30 @@ public class Statistics {
 
 #### User接口：
 
+##### 新添加：获取用户信息：
+
+Path:"/get_user_information"
+
+{
+
+​	String  user_id;
+
+}
+
+return:
+
+{
+
+​	 int code;
+
+​     String msg;
+
+​     User data;//返回用户信息
+
+}
+
+
+
 ##### 1.注册：(待定是否注册时直接完善用户信息) 已实现
 
  Path: “/register”
