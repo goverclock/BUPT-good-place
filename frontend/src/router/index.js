@@ -6,7 +6,7 @@ const routes = [
     path: '/',
     name: 'home',
     component: Layout,
-    meta: {title: "主页"},
+    meta: { title: "主页" },
     children: [
       {
         path: "login",
@@ -33,14 +33,23 @@ const routes = [
           requireAuth: true,
         },
         component: () => import('@/views/personal/index.vue'),
+        meta: { title: "个人中心" },
         children: [
           {
-            path: 'message',
-            name: 'PersonalMessage',
+            path: 'profile',
+            name: 'PersonalProfile',
             meta: {
               requireAuth: true
             },
-            component: () => import('@/views/personal/Message.vue'),
+            component: () => import('@/views/personal/profile.vue'),
+          },
+          {
+            path: 'detail',
+            name: 'PersonalDetail',
+            meta: {
+              requireAuth: true
+            },
+            component: () => import('@/views/personal/detail.vue'),
           },
         ],
       },
