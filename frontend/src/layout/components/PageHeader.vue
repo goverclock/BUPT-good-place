@@ -60,7 +60,7 @@ const unReadCount = ref(0)
 
 <style lang="scss">
 .header-cont {
-    background-color: white;
+    background-color: #f5f7f9;
     display: flex;
     align-items: center;
     justify-content: space-between;

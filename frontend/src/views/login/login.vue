@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { LoginReq } from '@/request/api'
+import { LoginReq, GetUserInfoReq } from '@/request/api/user'
 const formRef = ref();
 const form = reactive({
   account: "",
@@ -62,17 +62,30 @@ function doLogin() {
     LoginReq(data)
       .then((res) => {
         ElMessage({ message: "登录成功!", type: "success" });
-        console.log("LoginReq OK:", res.data)
-        store.commit('user/setToken', res.data);  // token
+        store.commit('user/setToken', res.data);  // save token
         // store.dispatch('user/refreshInfo');
         // store.commit("setRouteLoaded", false);
         localStorage.setItem('pm_token', res.data)
+
         router.push("/");
       }).catch(err => {
         console.log("LoginReq error:", err)
       }).finally(() => {
         loginLoading.value = false;
       })
+
+    // acquire user information
+    data = {
+      user_id: form.account,
+    }
+    
+    GetUserInfoReq(data)
+      .then((res) => {
+        console.log("got user info: ", res.data)
+      }).catch(err => {
+        console.error("failed to get user info: ", err)
+      })
+
   });
 }
 </script>

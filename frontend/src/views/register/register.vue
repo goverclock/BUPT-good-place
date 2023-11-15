@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { RegisterReq } from '@/request/api'
+import { RegisterReq } from '@/request/api/user'
 import cityData from '@/assets/pca-code.json'
 
 const formRef = ref();

@@ -29,13 +29,10 @@ const desc = "asjdlkqjwehaks"
 
 const router = useRouter();
 function editProfile() {
-    // ElMessage({ message: "not implemented yet!", type: "error" });
     router.push("/user/edit")
 }
 
 </script>
-
-
 
 <style lang="scss">
 .page {

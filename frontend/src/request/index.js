@@ -5,7 +5,7 @@ import router from "../router";
 
 export default function request(options) {
   return new Promise((resolve, reject) => {
-    const instance = axios.create({ ...config });
+    const instance = axios.create({ ...config() });
     // response 响应拦截器
     instance.interceptors.response.use(
       (response) => {
@@ -14,9 +14,6 @@ export default function request(options) {
       (err) => {
         if (err && err.response) {
           switch (err.response.status) {
-            case 0:
-              err.message = "unknown error";
-              break;
             case 400:
               err.message = "请求错误";
               break;
@@ -54,7 +51,6 @@ export default function request(options) {
           }
         }
 
-        console.error(err);
         if (err.message) {
           ElMessage({ message: err.message, type: "error" });
         }

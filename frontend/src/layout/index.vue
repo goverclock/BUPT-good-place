@@ -22,6 +22,7 @@ const showLeft = computed(() => {
   const routeName = route.name;
   return !['Login', 'Register', 'NotFound'].includes(routeName);
 })
+
 </script>
 
 <style lang="scss">
