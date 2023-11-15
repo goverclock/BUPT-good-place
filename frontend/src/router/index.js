@@ -27,29 +27,29 @@ const routes = [
         meta: { title: "页面不存在" },
       },
       {
-        path: "personal",
-        name: "Personal",
+        path: "user",
+        name: "User",
         meta: {
           requireAuth: true,
         },
-        component: () => import('@/views/personal/index.vue'),
+        component: () => import('@/views/user/index.vue'),
         meta: { title: "个人中心" },
         children: [
           {
-            path: 'profile',
-            name: 'PersonalProfile',
+            path: 'edit',
+            name: 'UserEdit',
             meta: {
               requireAuth: true
             },
-            component: () => import('@/views/personal/profile.vue'),
+            component: () => import('@/views/user/edit.vue'),
           },
           {
             path: 'detail',
-            name: 'PersonalDetail',
+            name: 'UserDetail',
             meta: {
               requireAuth: true
             },
-            component: () => import('@/views/personal/detail.vue'),
+            component: () => import('@/views/user/detail.vue'),
           },
         ],
       },

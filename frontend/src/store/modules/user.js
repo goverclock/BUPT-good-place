@@ -1,4 +1,4 @@
-// import { userInfo } from '@/apis/personal';
+// import { userInfo } from '@/apis/user';
 export default {
   namespaced: true,
   state: {

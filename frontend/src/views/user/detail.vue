@@ -27,8 +27,10 @@ const registerTime = "2000-12-12"
 const registerCity = "地球"
 const desc = "asjdlkqjwehaks"
 
+const router = useRouter();
 function editProfile() {
-    ElMessage({ message: "not implemented yet!", type: "error" });
+    // ElMessage({ message: "not implemented yet!", type: "error" });
+    router.push("/user/edit")
 }
 
 </script>

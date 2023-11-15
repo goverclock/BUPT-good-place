@@ -8,7 +8,7 @@
         <div class="right flex-center">
             <template v-if="isLogin">
                 <div class="gap">
-                    <router-link to="/personal/message">
+                    <router-link to="/user/message">
                         <el-badge :is-dot="!!unReadCount">
                             <el-icon>
                                 <message />
@@ -23,7 +23,7 @@
                     </div>
                     <template #dropdown>
                         <el-dropdown-menu>
-                            <el-dropdown-item command="toPersonal">个人中心</el-dropdown-item>
+                            <el-dropdown-item command="toUser">个人中心</el-dropdown-item>
                             <el-dropdown-item divided command="toLogout">退出</el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
@@ -39,8 +39,8 @@
 <script setup>
 const router = useRouter();
 const commands = ({
-    toPersonal: () => {
-        router.push('/personal/detail')
+    toUser: () => {
+        router.push('/user/detail')
     },
     toLogout: () => {
         console.log('退出登录')
@@ -60,6 +60,7 @@ const unReadCount = ref(0)
 
 <style lang="scss">
 .header-cont {
+    background-color: white;
     display: flex;
     align-items: center;
     justify-content: space-between;
