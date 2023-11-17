@@ -3,11 +3,14 @@ export default {
   namespaced: true,
   state: {
     token: '',
-    userInfo: {} // 用户基本信息
+    userInfo: {}
   },
   getters: {
     isLogin(state) {
       return !!state.token || !!localStorage.getItem('pm_token');
+    },
+    userInfo(state) {
+      return JSON.parse(localStorage.getItem('user_info'));
     }
   },
   mutations: {
@@ -20,10 +23,12 @@ export default {
       localStorage.removeItem('pm_token');
     },
     setUserInfo(state, info) {
-      state.userInfo = info || {};
+      localStorage.setItem('user_info', JSON.stringify(info))
+      state.userInfo = info;
     },
     clearUserInfo(state) {
       state.userInfo = {};
+      localStorage.removeItem('user_info')
     }
   },
   actions: {

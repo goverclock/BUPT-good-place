@@ -65,7 +65,14 @@ function doLogin() {
         store.commit('user/setToken', res.data);  // save token
         // store.dispatch('user/refreshInfo');
         // store.commit("setRouteLoaded", false);
-        router.push("/user/detail");  // TODO: goto main page after login
+
+        GetUserInfoReq(data)
+          .then((res) => {
+            store.commit('user/setUserInfo', res.data)
+            router.push("/user/detail");  // TODO: goto main page after login
+          }).catch(err => {
+            console.error("failed to get user info: ", err)
+          })
       }).catch(err => {
         console.log("LoginReq error:", err)
       }).finally(() => {
@@ -76,15 +83,6 @@ function doLogin() {
     data = {
       user_id: form.account,
     }
-    
-    // TODO: store user inforamtion
-    // GetUserInfoReq(data)
-    //   .then((res) => {
-    //     console.log("got user info: ", res.data)
-    //   }).catch(err => {
-    //     console.error("failed to get user info: ", err)
-    //   })
-
   });
 }
 </script>

@@ -21,11 +21,14 @@
 </template>
 
 <script setup>
+const store = useStore()
+const userInfo = store.getters['user/userInfo'];
+console.log(userInfo)
 
-const welcomeWord = "欢迎,Admin"
-const registerTime = "2000-12-12"
-const registerCity = "地球"
-const desc = "asjdlkqjwehaks"
+const welcomeWord = computed(() => "欢迎," + userInfo.user_id)
+const registerTime = computed(() => userInfo.register_time)
+const registerCity = computed(() => userInfo.register_city)
+const desc = computed(() => userInfo.description)
 
 const router = useRouter();
 function editProfile() {

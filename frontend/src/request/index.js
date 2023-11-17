@@ -61,7 +61,6 @@ export default function request(options) {
     // 请求处理
     instance(options)
       .then((res) => {
-        console.log("instance res:", res)
         if (res.code === 1) {
           resolve(res);
         } else {

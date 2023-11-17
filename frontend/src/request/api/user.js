@@ -21,7 +21,6 @@ export function RegisterReq(d) {
 export function GetUserInfoReq(d) {
     return request({
         url: 'get_user_information',
-        mode: 'no-cors',
         method: 'post',
         data: d,
     });
