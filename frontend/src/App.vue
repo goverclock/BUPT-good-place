@@ -6,6 +6,16 @@
 
 <script setup>
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+const store = useStore();
+const router = useRouter();
+
+const isLogin = store.getters['user/isLogin'];
+if (isLogin) {
+  router.push('/user/detail')
+} else {
+  router.push('/login')
+}
+
 </script>
 
 <style>

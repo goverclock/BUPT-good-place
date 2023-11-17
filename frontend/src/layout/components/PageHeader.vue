@@ -37,13 +37,19 @@
 </template>
 
 <script setup>
+import { storeKey } from 'vuex';
+
+const store = useStore();
 const router = useRouter();
+
 const commands = ({
     toUser: () => {
         router.push('/user/detail')
     },
     toLogout: () => {
-        console.log('退出登录')
+        store.commit('user/clearToken')
+        store.commit('user/clearUserInfo')
+        router.push('/login')
     }
 });
 
@@ -51,10 +57,13 @@ function handleCommand(cmd) {
     commands[cmd] && commands[cmd]();
 }
 
+// const isLogin = computed(() => store.getters['user/isLogin']);
+// const userInfo = computed(() => store.state.user.userInfo);
+// const username = computed(() => userInfo.value?.name)
+// const unReadCount = computed(() => userInfo.value?.unReadCount);
 const isLogin = ref(false)
 const username = ref('admin')
 isLogin.value = true;
-
 const unReadCount = ref(0)
 </script>
 
