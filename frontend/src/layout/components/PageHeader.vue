@@ -7,15 +7,6 @@
         </div>
         <div class="right flex-center">
             <template v-if="isLogin">
-                <div class="gap">
-                    <router-link to="/user/message">
-                        <el-badge :is-dot="!!unReadCount">
-                            <el-icon>
-                                <message />
-                            </el-icon>
-                        </el-badge>
-                    </router-link>
-                </div>
                 <el-dropdown trigger="click" @command="handleCommand">
                     <div class="flex-center cursor">
                         {{ username }}
@@ -28,9 +19,6 @@
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
-            </template>
-            <template v-else-if="$route.name !== 'Login'">
-                <router-link to="/login">{{ ('登录') }}</router-link>
             </template>
         </div>
     </div>
@@ -50,6 +38,7 @@ const commands = ({
         store.commit('user/clearToken')
         store.commit('user/clearUserInfo')
         router.push('/login')
+        location.reload()
     }
 });
 
@@ -57,14 +46,14 @@ function handleCommand(cmd) {
     commands[cmd] && commands[cmd]();
 }
 
-// const isLogin = computed(() => store.getters['user/isLogin']);
-// const userInfo = computed(() => store.state.user.userInfo);
-// const username = computed(() => userInfo.value?.name)
-// const unReadCount = computed(() => userInfo.value?.unReadCount);
-const isLogin = ref(false)
-const username = ref('admin')
-isLogin.value = true;
-const unReadCount = ref(0)
+const isLogin = computed(() => store.getters['user/isLogin']);
+let username = computed(() => {
+    if (isLogin.value) {
+        let userInfo = store.getters['user/userInfo'];
+        return userInfo?.user_id
+    }
+    return "未登录"
+})
 </script>
 
 <style lang="scss">

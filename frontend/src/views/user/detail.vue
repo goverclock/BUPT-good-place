@@ -1,5 +1,5 @@
 <template>
-    <div class="page">
+    <div class="detail-page">
         <h1>{{ welcomeWord }}</h1>
         <el-descriptions title="基本信息" :column="2">
             <el-descriptions-item label="级别" width="400px">普通用户</el-descriptions-item>
@@ -9,10 +9,10 @@
         </el-descriptions>
         <el-divider />
         <el-descriptions title="认证信息" :column="2">
-            <el-descriptions-item label="姓名" width="400px">lol the name</el-descriptions-item>
-            <el-descriptions-item label="证件类型">lol the ID type</el-descriptions-item>
-            <el-descriptions-item label="手机号码">lol the tele</el-descriptions-item>
-            <el-descriptions-item label="证件号码">lol the ID number</el-descriptions-item>
+            <el-descriptions-item label="姓名" width="400px">{{ name }}</el-descriptions-item>
+            <el-descriptions-item label="证件类型">{{ idType }}</el-descriptions-item>
+            <el-descriptions-item label="手机号码">{{ tele }}</el-descriptions-item>
+            <el-descriptions-item label="证件号码">{{ id }}</el-descriptions-item>
         </el-descriptions>
 
         <br>
@@ -21,6 +21,8 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
+
 const store = useStore()
 const userInfo = store.getters['user/userInfo'];
 console.log(userInfo)
@@ -30,6 +32,11 @@ const registerTime = computed(() => userInfo.register_time)
 const registerCity = computed(() => userInfo.register_city)
 const desc = computed(() => userInfo.description)
 
+const name = computed(() => userInfo.name)
+const tele = computed(() => userInfo.phone_num)
+const idType = computed(() => userInfo.identity_type)
+const id = computed(() => userInfo.identity_id)
+
 const router = useRouter();
 function editProfile() {
     router.push("/user/edit")
@@ -38,7 +45,8 @@ function editProfile() {
 </script>
 
 <style lang="scss">
-.page {
+.detail-page {
+    background: #fff;
     height: 100%;
     padding-left: 3%;
 }

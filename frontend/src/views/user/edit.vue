@@ -5,7 +5,7 @@
 
 <script setup>
 import { ElMessage } from 'element-plus';
-import { GetUserInfoReq } from '../../request/api/user';
+import { GetUserInfoReq } from '@/request/api/user';
 
 function testAPI() {
   let data = {

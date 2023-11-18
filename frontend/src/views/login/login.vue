@@ -63,13 +63,12 @@ function doLogin() {
       .then((res) => {
         ElMessage({ message: "登录成功!", type: "success" });
         store.commit('user/setToken', res.data);  // save token
-        // store.dispatch('user/refreshInfo');
-        // store.commit("setRouteLoaded", false);
 
         GetUserInfoReq(data)
           .then((res) => {
             store.commit('user/setUserInfo', res.data)
             router.push("/user/detail");  // TODO: goto main page after login
+            location.reload();
           }).catch(err => {
             console.error("failed to get user info: ", err)
           })
@@ -78,11 +77,6 @@ function doLogin() {
       }).finally(() => {
         loginLoading.value = false;
       })
-
-    // acquire user information
-    data = {
-      user_id: form.account,
-    }
   });
 }
 </script>
