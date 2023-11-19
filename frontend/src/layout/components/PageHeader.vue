@@ -25,8 +25,6 @@
 </template>
 
 <script setup>
-import { storeKey } from 'vuex';
-
 const store = useStore();
 const router = useRouter();
 
@@ -37,7 +35,6 @@ const commands = ({
     toLogout: () => {
         store.commit('user/clearToken')
         store.commit('user/clearUserInfo')
-        router.push('/login')
         location.reload()
     }
 });
