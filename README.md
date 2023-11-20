@@ -103,7 +103,31 @@ return:
 
 }
 
+##### 新添加：修改用户密码：
 
+Path:"/update_password"
+
+{
+
+​	String password;
+
+​	String new_password;
+
+}
+
+return:
+
+{
+
+​	int code;
+
+​	String msg;
+
+​	null;
+
+}
+
+##### 
 
 ##### 1.注册：(待定是否注册时直接完善用户信息) 已实现
 
@@ -178,10 +202,6 @@ Path: “/update”
 { 
 
 ​	String user_id;
-
-​	String password;
-
-​	String new_password; 
 
 ​    String phone_num;
 
