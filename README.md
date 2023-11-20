@@ -109,6 +109,8 @@ Path:"/update_password"
 
 {
 
+​	String user_id;
+
 ​	String password;
 
 ​	String new_password;
