@@ -1,19 +1,7 @@
 <template>
-  <!-- <div class="common-layout">
-    <el-container>
-      <el-header>
-        Header
-      </el-header>
-      <el-container>
-        <el-aside width="200px">Aside</el-aside>
-        <el-main>Main</el-main>
-      </el-container>
-    </el-container>
-  </div> -->
-
   <div class="page-container">
     <header>
-      <PageHeader />
+      <PageHeader></PageHeader>
     </header>
     <main>
       <div v-if="showLeft" class="left">
@@ -103,7 +91,8 @@ if (isLogin) {
 
     >.left {
       height: 100%;
-      background-color: #000;
+      width: 13%;
+      background-color: #545c64;
       color: #fff;
     }
 
