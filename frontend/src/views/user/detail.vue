@@ -25,14 +25,13 @@ import { computed } from 'vue';
 
 const store = useStore()
 const userInfo = store.getters['user/userInfo'];
-console.log(userInfo)
 
 const welcomeWord = computed(() => "欢迎," + userInfo?.user_id)
 const registerTime = computed(() => userInfo?.register_time)
 const registerCity = computed(() => userInfo?.register_city)
 const desc = computed(() => userInfo?.description)
 
-const name = computed(() => userInfo?.name)
+const name = computed(() => userInfo?.name || "未实名认证")
 const tele = computed(() => userInfo?.phone_num)
 const idType = computed(() => userInfo?.identity_type)
 const id = computed(() => userInfo?.identity_id)

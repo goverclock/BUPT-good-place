@@ -73,7 +73,7 @@ function doLogin() {
             console.error("failed to get user info: ", err)
           })
       }).catch(err => {
-        console.log("LoginReq error:", err)
+        console.error("LoginReq error:", err)
       }).finally(() => {
         loginLoading.value = false;
       })

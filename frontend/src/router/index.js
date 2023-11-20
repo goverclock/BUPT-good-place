@@ -4,7 +4,7 @@ import Layout from '@/layout/index.vue'
 const routes = [
   {
     path: '/',
-    name: 'home',
+    name: 'Home',
     component: Layout,
     meta: { title: "主页" },
     children: [

@@ -114,8 +114,6 @@ const store = useStore();
 const router = useRouter();
 
 function doRegister() {
-        console.log("form is:", form)
-
         formRef.value.validate((valid) => {
                 if (!valid) return;
 
@@ -136,11 +134,10 @@ function doRegister() {
                 RegisterReq(data)
                         .then(res => {
                                 ElMessage({ message: "注册成功!", type: "success" });
-                                console.log("Register success", res.data)
                                 router.push("/login")
                         })
                         .catch(err => {
-                                console.log("RegisterReq error", err)
+                                console.error("RegisterReq error", err)
                         })
                         .finally(() => {
                                 registerLoading.value = false;

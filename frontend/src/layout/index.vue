@@ -1,4 +1,16 @@
 <template>
+  <!-- <div class="common-layout">
+    <el-container>
+      <el-header>
+        Header
+      </el-header>
+      <el-container>
+        <el-aside width="200px">Aside</el-aside>
+        <el-main>Main</el-main>
+      </el-container>
+    </el-container>
+  </div> -->
+
   <div class="page-container">
     <header>
       <PageHeader />
@@ -17,6 +29,7 @@
 <script setup>
 import PageHeader from './components/PageHeader.vue'
 import PageSidebar from './components/PageSidebar.vue'
+
 const route = useRoute();
 const showLeft = computed(() => {
   const routeName = route.name;
@@ -28,13 +41,49 @@ const router = useRouter();
 
 const isLogin = store.getters['user/isLogin'];
 if (isLogin) {
-  router.push('/user/detail')
+  const routeName = route.name;
+  if (["Home", "Login"].includes(routeName)) {
+    router.push('/user/detail')
+  }
 } else {
   router.push('/login')
 }
 </script>
 
 <style lang="scss">
+.common-layout {
+
+  .el-header,
+  .el-footer,
+  .el-main,
+  .el-aside {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .el-header,
+  .el-footer {
+    background-color: var(--el-color-primary-light-7);
+    color: var(--el-text-color-primary);
+    text-align: center;
+  }
+
+  .el-aside {
+    background-color: var(--el-color-primary-light-8);
+    color: var(--el-text-color-primary);
+    text-align: center;
+  }
+
+  .el-main {
+    background-color: var(--el-color-primary-light-9);
+    color: var(--el-text-color-primary);
+    text-align: center;
+
+    height: 150px;
+  }
+}
+
 .page-container {
   display: flex;
   flex-direction: column;
@@ -61,7 +110,6 @@ if (isLogin) {
     >.right {
       flex: 1;
       overflow: hidden;
-      // background-color: #f5f7f9;
 
       >.main-body {
         padding: 16px 16px 30px;
@@ -71,5 +119,4 @@ if (isLogin) {
       }
     }
   }
-}
-</style>
+}</style>
