@@ -68,7 +68,6 @@ function doLogin() {
           .then((res) => {
             store.commit('user/setUserInfo', res.data)
             router.push("/user/detail");  // TODO: goto main page after login
-            location.reload();
           }).catch(err => {
             console.error("failed to get user info: ", err)
           })

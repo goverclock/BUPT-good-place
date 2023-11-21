@@ -28,6 +28,11 @@
 const store = useStore();
 const router = useRouter();
 
+const redirectReload = async (p) => {
+    await router.push({ path: p })
+    router.go()
+}
+
 const commands = ({
     toUser: () => {
         router.push('/user/detail')
@@ -35,7 +40,7 @@ const commands = ({
     toLogout: () => {
         store.commit('user/clearToken')
         store.commit('user/clearUserInfo')
-        location.reload()
+        redirectReload('/login')
     }
 });
 
