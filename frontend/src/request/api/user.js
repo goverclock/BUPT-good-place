@@ -28,7 +28,15 @@ export function GetUserInfoReq(d) {
 
 export function UpdateInformationReq(d) {
     return request({
-        url: 'update',
+        url: 'update_information',
+        method: 'post',
+        data: d,
+    });
+}
+
+export function UpdatePassword(d) {
+    return request({
+        url: 'update_password',
         method: 'post',
         data: d,
     });

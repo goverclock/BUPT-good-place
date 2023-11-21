@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { UpdateInformationReq } from '@/request/api/user'
+import { UpdateInformationReq, GetUserInfoReq } from '@/request/api/user'
 import { computed, reactive } from 'vue';
 
 const store = useStore()
@@ -58,11 +58,24 @@ function editConfirm() {
     description: edit_form.new_desc,
   }
 
+  const redirectReload = async (p) => {
+    await router.push({ path: p })
+    router.go()
+  }
+
   formRef.value.validate((valid) => {
     if (!valid) return;
     UpdateInformationReq(data)
       .then(res => {
-        console.log(res.data);
+        // ignore res.data, using GetUserInfoReq instead
+        GetUserInfoReq(data)
+          .then((res) => {
+            ElMessage({ message: "修改成功!", type: "success" });
+            store.commit('user/setUserInfo', res.data)
+            setTimeout(() => {
+              redirectReload('/user/detail')  // TODO: goto main page after login
+            }, 1000)
+          })
       })
   })
 }
