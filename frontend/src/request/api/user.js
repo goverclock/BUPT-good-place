@@ -26,3 +26,10 @@ export function GetUserInfoReq(d) {
     });
 }
 
+export function UpdateInformationReq(d) {
+    return request({
+        url: 'update',
+        method: 'post',
+        data: d,
+    });
+}

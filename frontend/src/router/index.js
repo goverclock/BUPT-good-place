@@ -44,6 +44,14 @@ const routes = [
             component: () => import('@/views/user/edit.vue'),
           },
           {
+            path: 'changepass',
+            name: 'ChangePass',
+            meta: {
+              requireAuth: true
+            },
+            component: () => import('@/views/user/change_pass.vue'),
+          },
+          {
             path: 'detail',
             name: 'UserDetail',
             meta: {

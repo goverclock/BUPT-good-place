@@ -17,6 +17,7 @@
 
         <br>
         <el-button type="primary" plain @click="editProfile">修改个人信息</el-button>
+        <el-button type="primary" plain @click="editPass">修改密码</el-button>
     </div>
 </template>
 
@@ -39,6 +40,9 @@ const id = computed(() => userInfo?.identity_id)
 const router = useRouter();
 function editProfile() {
     router.push("/user/edit")
+}
+function editPass() {
+    router.push("/user/changepass")
 }
 
 </script>
