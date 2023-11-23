@@ -10,7 +10,7 @@
                                         <el-input v-model="form.password" type="password" placeholder="密码"></el-input>
                                 </el-form-item>
                                 <el-form-item label="联系电话" prop="tele">
-                                        <el-input v-model="form.tele"></el-input>
+                                        <el-input v-model="form.tele" placeholder="输入11位电话号码"></el-input>
                                 </el-form-item>
                                 <el-form-item label="地区" prop="city">
                                         <el-cascader ref="cascaderAddr" :options="cityData" :props="city" placeholder="请选择地区"

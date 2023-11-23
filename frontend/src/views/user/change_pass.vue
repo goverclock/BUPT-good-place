@@ -20,6 +20,7 @@
 </template>
 
 <script setup>
+import { UpdatePasswordReq } from '@/request/api/user'
 import { reactive } from 'vue';
 
 const store = useStore()
@@ -34,16 +35,20 @@ const changepass_form = reactive({
 
 const router = useRouter();
 function editConfirm() {
-  console.log("confirm edit")
-
   let data = {
     user_id: userInfo.user_id,
-    password: '',
-    new_password: '',
-    phone_num: '',
-    description: '',
+    password: changepass_form.old_pass,
+    new_password: changepass_form.new_pass,
   }
-  console.log(data)
+
+  formRef.value.validate((valid) => {
+    if (!valid) return;
+    UpdatePasswordReq(data)
+      .then(res => {
+        ElMessage({ message: "修改成功!", type: "success" });
+        router.push('/user/detail')
+      })
+  })
 }
 
 function editCancel() {
@@ -54,21 +59,32 @@ const rules = computed(() => {
   return {
     old_pass: {
       required: true,
-      validator: (rule, value, callback) => {
-        if (!/^\d{11}$/.test(value)) {
-          return callback(new Error("请输入有效的11位电话号码"))
-        }
-        console.log(changepass_form.new_pass, changepass_form.new_pass_repeat)
-        callback()
-      },
-      trigger: ["change", "blur"],
     },
     new_pass: {
       required: true,
+      validator: (rule, value, callback) => {
+        const numCount = (value.match(/\d/g) || []).length;
+        if (numCount < 2) {
+          callback(new Error("密码必须包含至少2个数字"));
+        } else if (value.toLowerCase() === value || value.toUpperCase() === value) {
+          callback(new Error("密码必须同时包含大写和小写字母"));
+        } else if (value.length < 6) {
+          callback(new Error("密码不能少于6位字符"));
+        }
+
+        callback();
+      },
+
       trigger: ["change", "blur"],
     },
     new_pass_repeat: {
       required: true,
+      validator: (rule, value, callback) => {
+        if (changepass_form.new_pass != changepass_form.new_pass_repeat) {
+          return callback(new Error("两次输入的密码不一致"))
+        }
+        callback()
+      },
       trigger: ["change", "blur"],
     },
   }

@@ -73,7 +73,7 @@ function editConfirm() {
             ElMessage({ message: "修改成功!", type: "success" });
             store.commit('user/setUserInfo', res.data)
             setTimeout(() => {
-              redirectReload('/user/detail')  // TODO: goto main page after login
+              redirectReload('/user/detail')
             }, 1000)
           })
       })

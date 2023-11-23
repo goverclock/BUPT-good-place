@@ -34,7 +34,7 @@ export function UpdateInformationReq(d) {
     });
 }
 
-export function UpdatePassword(d) {
+export function UpdatePasswordReq(d) {
     return request({
         url: 'update_password',
         method: 'post',
