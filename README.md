@@ -199,7 +199,7 @@ return:
 
 ##### 3.修改信息：已实现
 
-Path: “/update”
+Path: “/update_information”
 
 { 
 
@@ -222,26 +222,6 @@ return:
 ​    User data;//返回修改后的用户信息
 
 }
-
-##### 4.完善个人信息：已实现
-
-Path:"/information_update"//注册完成之后调用一次，确定用户信息
-
-```
-{
-​	 String user_id;
-	 String user_name;//用户名
-	 String user_type;
-	 String name;//姓名
-	 String identity_type;
-	 String identity_id;
-	 String phone_num;
-	 String user_rank;
-	 String description;
-	 String register_city;//具体到省市
-
-}
-```
 
 
 #### 寻去处业务接口
