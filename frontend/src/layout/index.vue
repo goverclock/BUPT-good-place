@@ -99,9 +99,12 @@ if (isLogin) {
     >.right {
       flex: 1;
       overflow: hidden;
+      padding-top: 1%;
+      padding-left: 2%;
+      padding-right: 2%;
 
       >.main-body {
-        padding: 16px 16px 30px;
+        padding: 16px 16px 16px;
         overflow: auto;
         height: 100%;
         box-sizing: border-box;

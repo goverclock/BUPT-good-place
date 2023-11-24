@@ -95,7 +95,7 @@ const rules = computed(() => {
 .detail-page {
   background: #fff;
   height: 100%;
-  padding-left: 3%;
+  // padding-left: 3%;
 }
 
 .inline-item {

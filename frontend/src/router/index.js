@@ -15,6 +15,12 @@ const routes = [
         meta: { title: "主页" },
       },
       {
+        path: "wheretogo",
+        name: "WhereToGo",
+        component: () => import('@/views/wheretogo.vue'),
+        meta: { title: "寻去处" },
+      },
+      {
         path: "login",
         name: "Login",
         component: () => import('@/views/login.vue'),

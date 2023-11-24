@@ -109,11 +109,10 @@ const rules = computed(() => {
 .detail-page {
   background: #fff;
   height: 100%;
-  padding-left: 2%;
 }
 
 .inline-item {
-  // display: inline-flex;
+  display: inline-flex;
   width: 300px;
 }
 </style>

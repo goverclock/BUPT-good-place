@@ -52,6 +52,5 @@ function editPass() {
 .detail-page {
     background: #fff;
     height: 100%;
-    padding-left: 2%;
 }
 </style>
