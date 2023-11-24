@@ -6,18 +6,24 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Layout,
-    meta: { title: "主页" },
+    meta: { title: " " },
     children: [
+      {
+        path: "home",
+        name: "Main",
+        component: () => import('@/views/home.vue'),
+        meta: { title: "主页" },
+      },
       {
         path: "login",
         name: "Login",
-        component: () => import('@/views/login/login.vue'),
+        component: () => import('@/views/login.vue'),
         meta: { title: "登录" },
       },
       {
         path: "register",
         name: "Register",
-        component: () => import('@/views/register/register.vue'),
+        component: () => import('@/views/register.vue'),
         meta: { title: "注册" },
       },
       {
@@ -28,11 +34,13 @@ const routes = [
       },
       {
         path: "user",
+        redirect: to => {
+          return '/user/detail'
+        },
         name: "User",
         meta: {
           requireAuth: true,
         },
-        component: () => import('@/views/user/index.vue'),
         meta: { title: "个人中心" },
         children: [
           {
@@ -60,14 +68,6 @@ const routes = [
             component: () => import('@/views/user/detail.vue'),
           },
         ],
-      },
-      {
-        path: 'app',
-        name: 'App',
-        meta: {
-          requireAuth: true,
-        },
-        component: () => import('@/views/app/index.vue')
       },
     ]
   },
