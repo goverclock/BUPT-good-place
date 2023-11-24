@@ -35,7 +35,7 @@
                 </el-icon>
                 <span>统计数据</span>
             </el-menu-item>
-            <el-menu-item index="4">
+            <el-menu-item index="/user/detail">
                 <el-icon>
                     <setting />
                 </el-icon>

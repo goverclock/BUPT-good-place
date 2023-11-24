@@ -67,7 +67,7 @@ function doLogin() {
         GetUserInfoReq(data)
           .then((res) => {
             store.commit('user/setUserInfo', res.data)
-            router.push("/user/detail");  // TODO: goto main page after login
+            router.push("/home");
           }).catch(err => {
             console.error("failed to get user info: ", err)
           })
