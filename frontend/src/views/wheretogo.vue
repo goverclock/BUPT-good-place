@@ -20,8 +20,6 @@
 
     <div class="main-content">
         <el-card :body-style="{ padding: '0px' }" v-for="item in displayedItems" :key="item.id" class="card">
-            <!-- <div slot="header" class="card-header">{{ item.title }}</div> -->
-            <!-- <div class="card-content">{{ item.content }}</div> -->
             <el-image fit="contain" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg">
                 <template #error>
                     <div class="image-slot">
@@ -39,13 +37,48 @@
             </div>
         </el-card>
     </div>
+
+    <!-- dialogs -->
+    <!-- publish -->
+    <el-dialog v-model="publishDialogVisible" title="发布好去处">
+        <el-form :model="publishForm">
+            <el-form-item label="主题" label-width=140px>
+                <el-input v-model="publishForm.topic_name" placeholder="输入主题" style="margin-right: 100px;" />
+            </el-form-item>
+            <el-form-item label="类型" label-width=140px>
+                <el-select v-model="publishForm.type" @change="handlePublishFormSelectChange" placeholder="选择类型">
+                    <el-option label="钓鱼" value="category1"></el-option>
+                    <el-option label="老少皆宜休闲" value="category2"></el-option>
+                    <el-option label="农家院" value="category3"></el-option>
+                    <el-option label="温泉度假" value="category4"></el-option>
+                    <el-option label="僻静休闲" value="category5"></el-option>
+                    <el-option label="游乐场" value="category6"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="地区" prop="city" label-width="140px">
+                <el-cascader ref="cascaderAddr" :options="cityData" :props="city" placeholder="请选择地区"
+                    @change="handleAddrChange"></el-cascader>
+            </el-form-item>
+            <el-form-item label="简介" label-width="140px">
+                <el-input v-model="publishForm.desc" placeholder="输入简介" type="textarea" style="margin-right: 100px;" />
+            </el-form-item>
+        </el-form>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="publishDialogVisible = false">取消</el-button>
+                <el-button type="primary" @click="handlePublishConfirm">
+                    发布
+                </el-button>
+            </span>
+        </template>
+    </el-dialog>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import { Picture as IconPicture } from '@element-plus/icons-vue'
+import cityData from '@/assets/pca-code.json'
 
-const currentDate = ref(new Date())
 const searchText = ref('');
 const selectedOption = ref('');
 const cardItems = ref([
@@ -68,8 +101,30 @@ const displayedItems = computed(() => {
     return cardItems.value.slice(start, end);
 });
 
+// dialog
+const publishDialogVisible = ref(false)
+const publishForm = reactive({
+    topic_name: '',
+    type: '',
+    desc: '',
+    city: '',
+})
+
+let city = {
+    value: 'code',
+    label: 'name',
+    children: 'children',
+}
+const cascaderAddr = ref()
+function handleAddrChange(e) {
+    let addrNode = unref(cascaderAddr).getCheckedNodes()[0]
+    let addrText = addrNode.pathLabels.join("-")
+    publishForm.city = addrText
+}
+
 const handlePublish = () => {
     console.log('Publish button clicked');
+    publishDialogVisible.value = true
 };
 
 const handleSearch = () => {
@@ -79,6 +134,14 @@ const handleSearch = () => {
 const handleSelectChange = (value) => {
     console.log('Selected category:', value);
 };
+
+const handlePublishFormSelectChange = (value) => {
+    console.log('Selected category:', value);
+};
+
+const handlePublishConfirm = (value) => {
+    console.log("Publish confirm:", publishForm.topic_name);
+}
 
 const handlePageChange = (newPage) => {
     console.log('Current page:', newPage);
@@ -147,4 +210,3 @@ const handlePageChange = (newPage) => {
     margin-right: 10px;
 }
 </style>
-

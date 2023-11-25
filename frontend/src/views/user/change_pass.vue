@@ -59,6 +59,7 @@ const rules = computed(() => {
   return {
     old_pass: {
       required: true,
+      message: "请输入原密码",
     },
     new_pass: {
       required: true,
