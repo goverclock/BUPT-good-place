@@ -32,8 +32,8 @@ public class GoodPlace {
     private String description;
     private List<String> files;
     private String max_price;
-    private String end_time;
-    private String create_time;
+    private long end_time;
+    private long create_time;
     private String change_time;
     private String state;//0表示已发布还未响应   1表示已响应还未接受  2表示已接受响应
 }
@@ -48,7 +48,7 @@ public class Welcome {
     private String user_id;
     private String description;
     private List<String> files;
-    private String create_time;
+    private long create_time;
     private String change_time;
     private String state;//0表示已发布响应还未接受  1表示响应已被请求方接受
 }
@@ -246,7 +246,7 @@ Path: “/findplace”
 
 ​    String  max_price;
 
-​    String  end_time;
+​    long  end_time;
 
 }
 
@@ -274,9 +274,9 @@ Path: "/query_request"
 
 ​	String topic_name;
 
-   String  create_time;
+   long  create_time;
 
-   String  end_time;
+   long  end_time;
 
 }
 
@@ -334,7 +334,7 @@ Path: "/request_update"
 
 ​    String  max_price;
 
-​    String  end_time;
+​    long  end_time;
 
 }
 
@@ -532,9 +532,9 @@ Path: "query_profit"
 
 {
 
-​	String start_time;
+​	long start_time;
 
-​    String end_time;
+​    long end_time;
 
 ​    String city;
 
@@ -560,9 +560,9 @@ Path: "query_profit_by_month"
 
 {
 
- 	String  start_time;YYYY-MM
+ 	long  start_time;//默认三个月需要前端规定开始结束时间实现
 
-​     String  end_time;YYYY-MM
+​     long  end_time;
 
 }
 
