@@ -7,7 +7,7 @@
       <div v-if="showLeft" class="left">
         <PageSidebar></PageSidebar>
       </div>
-      <div class="right">
+      <div :class="{ 'right': showLeft, 'right-no-padding': !showLeft }">
         <router-view></router-view>
       </div>
     </main>
@@ -110,5 +110,18 @@ if (isLogin) {
         box-sizing: border-box;
       }
     }
+
+    >.right-no-padding {
+      flex: 1;
+      overflow: hidden;
+
+      >.main-body {
+        padding: 16px 16px 16px;
+        overflow: auto;
+        height: 100%;
+        box-sizing: border-box;
+      }
+    }
   }
-}</style>
+}
+</style>

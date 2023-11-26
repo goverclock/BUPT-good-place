@@ -13,6 +13,10 @@
 <script setup>
 import { ref } from 'vue';
 
+const store = useStore()
+const userInfo = store.getters['user/userInfo'];
+userInfo?.user_id || location.reload();
+
 const carouselItems = ref([
   { src: 'src/assets/home_carousel/1.jpeg' },
   { src: 'src/assets/home_carousel/2.png' },

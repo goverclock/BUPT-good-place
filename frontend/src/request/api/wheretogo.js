@@ -7,3 +7,11 @@ export function PublishPlaceReq(d) {
         data: d,
     });
 }
+
+export function GetAllRequests(d) {
+    return request({
+        url: 'query_request_by_user_id',
+        method: 'post',
+        data: d,
+    });
+}
