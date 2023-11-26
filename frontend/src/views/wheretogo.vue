@@ -232,7 +232,7 @@ const handlePublishConfirm = (value) => {
             fd.append(key, data[key])
         })
         fileList.forEach((file, index) => {
-            fd.append(`files[]`, file.raw)
+            fd.append(`files`, file.raw)
         })
         // fd.append('files[]', fs.createReadStream(path.join(__dirname, 'test.png')), 'test.png')
 
