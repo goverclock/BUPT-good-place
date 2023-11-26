@@ -1,6 +1,6 @@
 <template>
     <div class="top">
-        <el-button type="primary" icon="edit" @click="handlePublish">发布</el-button>
+        <el-button type="primary" icon="edit" @click="publishDialogVisible = true">发布</el-button>
         <div class="space"></div>
         <el-input v-model="searchText" placeholder="搜索去处" style="width: 40%;" clearable prefix-icon="search"
             @change="handleSearch"></el-input>
@@ -62,6 +62,13 @@
             <el-form-item label="简介" label-width="140px">
                 <el-input v-model="publishForm.desc" placeholder="输入简介" type="textarea" style="margin-right: 100px;" />
             </el-form-item>
+            <el-upload drag multiple :on-change="handleNewFile" :auto-upload="false"
+                style="margin-left: 140px; margin-right: 100px;">
+                <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+                <div class="el-upload__text">
+                    拖动文件到此处或 <em>点击上传</em>
+                </div>
+            </el-upload>
         </el-form>
         <template #footer>
             <span class="dialog-footer">
@@ -76,8 +83,14 @@
 
 <script setup>
 import { ref } from 'vue';
-import { Picture as IconPicture } from '@element-plus/icons-vue'
+import { Picture as IconPicture, UploadFilled } from '@element-plus/icons-vue'
+import { PublishPlaceReq } from '@/request/api/wheretogo'
 import cityData from '@/assets/pca-code.json'
+import { ElMessage } from 'element-plus';
+
+const store = useStore()
+const userInfo = store.getters['user/userInfo'];
+userInfo?.user_id || location.reload();
 
 const searchText = ref('');
 const selectedOption = ref('');
@@ -92,7 +105,7 @@ const cardItems = ref([
 ]);
 
 const totalItems = ref(cardItems.value.length);
-const pageSize = ref(5);
+const pageSize = ref(4);
 const currentPage = ref(1);
 
 const displayedItems = computed(() => {
@@ -122,11 +135,6 @@ function handleAddrChange(e) {
     publishForm.city = addrText
 }
 
-const handlePublish = () => {
-    console.log('Publish button clicked');
-    publishDialogVisible.value = true
-};
-
 const handleSearch = () => {
     console.log('Search text:', searchText.value);
 };
@@ -139,8 +147,33 @@ const handlePublishFormSelectChange = (value) => {
     console.log('Selected category:', value);
 };
 
+const fileList = []
+const handleNewFile = (file) => {
+    fileList.push(file);
+};
+
 const handlePublishConfirm = (value) => {
-    console.log("Publish confirm:", publishForm.topic_name);
+    let data = {
+        user_id: userInfo.user_id,
+        type: publishForm.type,
+        topic_name: publishForm.topic_name,
+        description: publishForm.desc,
+        files: fileList,
+        city: publishForm.city,
+        max_price: '0',
+        end_time: '0',
+    }
+
+    let fd = new FormData();
+    Object.keys(data).forEach(key => {
+        fd.append(key, data[key])
+    })
+    // fd.append('files[]', fs.createReadStream(path.join(__dirname, 'test.png')), 'test.png')
+
+    PublishPlaceReq(fd)
+        .then(res => {
+            ElMessage({ message: "发布成功!", type: "success" });
+        })
 }
 
 const handlePageChange = (newPage) => {

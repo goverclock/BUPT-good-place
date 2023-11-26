@@ -1,11 +1,10 @@
 import axios from "axios";
 import config from "./config";
 import { ElMessage } from "element-plus";
-import router from "../router";
 
 export default function request(options) {
   return new Promise((resolve, reject) => {
-    const instance = axios.create({ ...config() });
+    const instance = axios.create({ ...config(options) });
     // response 响应拦截器
     instance.interceptors.response.use(
       (response) => {

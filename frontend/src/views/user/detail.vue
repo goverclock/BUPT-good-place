@@ -26,8 +26,8 @@ import { computed } from 'vue';
 
 const store = useStore()
 const userInfo = store.getters['user/userInfo'];
-
 userInfo?.user_id || location.reload();
+
 const welcomeWord = computed(() => "欢迎," + userInfo?.user_id)
 const registerTime = computed(() => userInfo?.register_time)
 const registerCity = computed(() => userInfo?.register_city)
