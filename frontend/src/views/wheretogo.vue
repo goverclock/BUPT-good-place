@@ -6,12 +6,12 @@
             @change="handleSearch"></el-input>
         <div class="space"></div>
         <el-select v-model="selectedOption" @change="handleSelectChange" placeholder="选择类型">
-            <el-option label="钓鱼" value="cate1"></el-option>
-            <el-option label="老少皆宜休闲" value="cate2"></el-option>
-            <el-option label="农家院" value="cate3"></el-option>
-            <el-option label="温泉度假" value="cate4"></el-option>
-            <el-option label="僻静休闲" value="cate5"></el-option>
-            <el-option label="游乐场" value="cate6"></el-option>
+            <el-option label="钓鱼" value="钓鱼"></el-option>
+            <el-option label="老少皆宜休闲" value="老少皆宜休闲"></el-option>
+            <el-option label="农家院" value="农家院"></el-option>
+            <el-option label="温泉度假" value="温泉度假"></el-option>
+            <el-option label="僻静休闲" value="僻静休闲"></el-option>
+            <el-option label="游乐场" value="游乐场"></el-option>
         </el-select>
     </div>
 
@@ -20,7 +20,7 @@
 
     <div class="main-content">
         <el-card :body-style="{ padding: '0px' }" v-for="item in displayedItems" :key="item.id" class="card">
-            <el-image fit="contain" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg">
+            <el-image fit="contain" :src="item.data.files[0]">
                 <template #error>
                     <div class="image-slot">
                         <el-icon><icon-picture /></el-icon>
@@ -32,7 +32,7 @@
                 <span>{{ item.title }}</span>
                 <div class="bottom">
                     <time class="time">{{ item.content }}</time>
-                    <el-button text class="button" @click="cardDetailVisible = true">详情</el-button>
+                    <el-button text class="button" @click="handleCardDetail(item.data)">详情</el-button>
                 </div>
             </div>
         </el-card>
@@ -41,18 +41,18 @@
     <!-- dialogs -->
     <!-- publish -->
     <el-dialog v-model="publishDialogVisible" title="发布寻去处">
-        <el-form ref="publishRef" :model="publishForm" :rules="rules">
+        <el-form ref="publishRef" :model="publishForm" :rules="publishRules">
             <el-form-item label="主题" prop="topic_name" label-width=140px>
                 <el-input v-model="publishForm.topic_name" placeholder="输入主题" style="margin-right: 100px;" />
             </el-form-item>
             <el-form-item label="类型" label-width=140px>
-                <el-select v-model="publishForm.type" @change="handlePublishFormSelectChange" placeholder="选择类型">
-                    <el-option label="钓鱼" value="cate1"></el-option>
-                    <el-option label="老少皆宜休闲" value="cate2"></el-option>
-                    <el-option label="农家院" value="cate3"></el-option>
-                    <el-option label="温泉度假" value="cate4"></el-option>
-                    <el-option label="僻静休闲" value="cate5"></el-option>
-                    <el-option label="游乐场" value="cate6"></el-option>
+                <el-select v-model="publishForm.type" placeholder="选择类型">
+                    <el-option label="钓鱼" value="钓鱼"></el-option>
+                    <el-option label="老少皆宜休闲" value="老少皆宜休闲"></el-option>
+                    <el-option label="农家院" value="农家院"></el-option>
+                    <el-option label="温泉度假" value="温泉度假"></el-option>
+                    <el-option label="僻静休闲" value="僻静休闲"></el-option>
+                    <el-option label="游乐场" value="游乐场"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="地区" prop="city" label-width="140px">
@@ -69,7 +69,7 @@
             <el-form-item label="简介" label-width="140px">
                 <el-input v-model="publishForm.desc" placeholder="输入简介" type="textarea" style="margin-right: 100px;" />
             </el-form-item>
-            <el-upload drag multiple :on-change="handleNewFile" :auto-upload="false"
+            <el-upload drag multiple :on-change="function (file) { fileList.push(file) }" :auto-upload="false"
                 style="margin-left: 140px; margin-right: 100px;">
                 <el-icon class="el-icon--upload"><upload-filled /></el-icon>
                 <div class="el-upload__text">
@@ -89,10 +89,17 @@
 
     <!-- detail -->
     <el-dialog v-model="cardDetailVisible" title="寻去处详情">
+        <el-descriptions :title="cardDetail.topic_name" :column="1">
+            <el-descriptions-item label="类型">{{ cardDetail.type }}</el-descriptions-item>
+            <el-descriptions-item label="地区">{{ cardDetail.city }}</el-descriptions-item>
+            <el-descriptions-item label="最高单价">{{ cardDetail.max_price }} 元</el-descriptions-item>
+            <el-descriptions-item label="请求描述">{{ cardDetail.description }}</el-descriptions-item>
+            <el-descriptions-item label="截止日期">{{ cardDetail.end_time }}</el-descriptions-item>
+        </el-descriptions>
         <template #footer>
             <span class="dialog-footer">
                 <el-button type="primary" plain>修改</el-button>
-                <el-button type="danger" plain @click="handlePublishConfirm">
+                <el-button type="danger" plain @click="handleDelete(cardDetail.request_id)">
                     删除
                 </el-button>
             </span>
@@ -103,10 +110,9 @@
 <script setup>
 import { ref } from 'vue';
 import { Picture as IconPicture, UploadFilled } from '@element-plus/icons-vue'
-import { PublishPlaceReq } from '@/request/api/wheretogo'
+import { GetAllRequests, PublishPlaceReq, DeleteRequestReq } from '@/request/api/wheretogo'
 import cityData from '@/assets/pca-code.json'
 import { ElMessage } from 'element-plus';
-import { GetAllRequests } from '../request/api/wheretogo';
 
 const store = useStore()
 const userInfo = store.getters['user/userInfo'];
@@ -115,9 +121,7 @@ userInfo?.user_id || location.reload();
 const searchText = ref('');
 const selectedOption = ref('');
 
-const cardItems = ref([
-    // TODO: truncate too long content, end with '...'
-]);
+const cardItems = ref([]);
 const totalItems = ref(cardItems.value.length);
 const pageSize = ref(4);
 const currentPage = ref(1);
@@ -128,11 +132,11 @@ let data = {
 GetAllRequests(data).then(res => {
     let ind = 1;
     for (const d of res.data) {
-        console.log(d)
         let card = {
             id: ind,
             title: d.topic_name || '暂无标题',
             content: d.description || '暂无描述',
+            data: d,
         }
         cardItems.value.push(card)
         ind++;
@@ -151,14 +155,14 @@ const publishDialogVisible = ref(false)
 const publishRef = ref();
 const publishForm = reactive({
     topic_name: '',
-    type: 'cate1',
+    type: '钓鱼',
     desc: '',
     city: '',
     max_price: 0,
     end_time: Date(),
 })
 
-const rules = computed(() => {
+const publishRules = computed(() => {
     return {
         topic_name: {
             required: true,
@@ -191,6 +195,27 @@ function handleAddrChange(e) {
 
 // card detail dialog
 const cardDetailVisible = ref(false)
+const cardDetail = ref({})
+const handleCardDetail = (data) => {
+    cardDetailVisible.value = true
+    let detail = {
+        topic_name: data.topic_name,
+        type: data.type,
+        city: data.city,
+        max_price: data.max_price,
+        end_time: data.end_time,
+        description: data.description,
+        request_id: data.request_id,
+    }
+    console.log(detail)
+    cardDetail.value = detail
+
+    const date = new Date(cardDetail.value.end_time * 1000)
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    cardDetail.value.end_time = `${year}-${month}-${day}`
+}
 
 const handleSearch = () => {
     console.log('Search text:', searchText.value);
@@ -200,16 +225,7 @@ const handleSelectChange = (value) => {
     console.log('Selected category:', value);
 };
 
-const handlePublishFormSelectChange = (value) => {
-    console.log('Selected category:', value);
-};
-
 const fileList = []
-const handleNewFile = (file) => {
-    fileList.push(file);
-    console.log(typeof file)
-    console.log(file)
-};
 
 const handlePublishConfirm = (value) => {
     publishRef.value.validate((valid) => {
@@ -220,13 +236,10 @@ const handlePublishConfirm = (value) => {
             type: publishForm.type,
             topic_name: publishForm.topic_name,
             description: publishForm.desc,
-            // files: fileList,
             city: publishForm.city,
             max_price: String(publishForm.max_price),
-            end_time: publishForm.end_time,
+            end_time: Date.parse(publishForm.end_time) / 1000,
         }
-        console.log("handlePublishConfirm", data)
-
         let fd = new FormData();
         Object.keys(data).forEach(key => {
             fd.append(key, data[key])
@@ -234,8 +247,8 @@ const handlePublishConfirm = (value) => {
         fileList.forEach((file, index) => {
             fd.append(`files`, file.raw)
         })
-        // fd.append('files[]', fs.createReadStream(path.join(__dirname, 'test.png')), 'test.png')
 
+        console.log("handlePublishConfirm", data)
         PublishPlaceReq(fd)
             .then(res => {
                 ElMessage({ message: "发布成功!", type: "success" });
@@ -244,9 +257,20 @@ const handlePublishConfirm = (value) => {
 }
 
 const handlePageChange = (newPage) => {
-    console.log('Current page:', newPage);
     currentPage.value = newPage;
 };
+
+const handleDelete = (req_id) => {
+    console.log("delete", req_id)
+    let data = {
+        request_id: req_id,
+    }
+    DeleteRequestReq(data)
+        .then(res => {
+            ElMessage({ message: "已删除!", type: "success" });
+        })
+}
+
 </script>
 
 <style scoped>

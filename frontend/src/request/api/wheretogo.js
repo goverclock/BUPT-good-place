@@ -15,3 +15,11 @@ export function GetAllRequests(d) {
         data: d,
     });
 }
+
+export function DeleteRequestReq(d) {
+    return request({
+        url: 'request_delete',
+        method: 'post',
+        data: d,
+    });
+}
