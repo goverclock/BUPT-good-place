@@ -10,7 +10,7 @@ export default function getConfig(options) {
       'token': localStorage.getItem('pm_token'),
     },
     // 设置超时时间
-    timeout: 10000,
+    timeout: 100000,
     // 携带凭证
     withCredentials: false,
     // 返回数据类型

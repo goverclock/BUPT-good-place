@@ -95,6 +95,13 @@
             <el-descriptions-item label="最高单价">{{ cardDetail.max_price }} 元</el-descriptions-item>
             <el-descriptions-item label="请求描述">{{ cardDetail.description }}</el-descriptions-item>
             <el-descriptions-item label="截止日期">{{ cardDetail.end_time }}</el-descriptions-item>
+            <el-descriptions-item label="附件">
+                <ul>
+                    <li v-for="(file, index) in cardDetail.files" :key="index">
+                        <el-link type="primary" :href="file" target="_blank" download>附件 {{ index + 1 }}</el-link>
+                    </li>
+                </ul>
+            </el-descriptions-item>
         </el-descriptions>
         <template #footer>
             <span class="dialog-footer">
@@ -205,9 +212,10 @@ const handleCardDetail = (data) => {
         max_price: data.max_price,
         end_time: data.end_time,
         description: data.description,
+        files: data.files,
         request_id: data.request_id,
     }
-    console.log(detail)
+    console.log(data)
     cardDetail.value = detail
 
     const date = new Date(cardDetail.value.end_time * 1000)
@@ -248,7 +256,6 @@ const handlePublishConfirm = (value) => {
             fd.append(`files`, file.raw)
         })
 
-        console.log("handlePublishConfirm", data)
         PublishPlaceReq(fd)
             .then(res => {
                 ElMessage({ message: "发布成功!", type: "success" });
@@ -261,7 +268,6 @@ const handlePageChange = (newPage) => {
 };
 
 const handleDelete = (req_id) => {
-    console.log("delete", req_id)
     let data = {
         request_id: req_id,
     }
