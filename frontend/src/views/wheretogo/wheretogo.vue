@@ -61,6 +61,11 @@ const cardItems = ref([]);
 const totalItems = ref(cardItems.value.length);
 const pageSize = ref(4);
 const currentPage = ref(1);
+const displayedItems = computed(() => {
+    const start = (currentPage.value - 1) * pageSize.value;
+    const end = start + pageSize.value;
+    return cardItems.value.slice(start, end);
+});
 
 let publishDialogVisible = ref(false)
 
@@ -82,12 +87,6 @@ GetAllRequests(data).then(res => {
     totalItems.value = cardItems.value.length
 })
 
-const displayedItems = computed(() => {
-    const start = (currentPage.value - 1) * pageSize.value;
-    const end = start + pageSize.value;
-    return cardItems.value.slice(start, end);
-});
-
 // card detail dialog
 const cardDetailVisible = ref(false)
 const cardDetail = ref({})
@@ -103,7 +102,7 @@ const handleCardDetail = (data) => {
         files: data.files,
         request_id: data.request_id,
     }
-    console.log(data)
+    // console.log(data)
     cardDetail.value = detail
 
     const date = new Date(cardDetail.value.end_time * 1000)
@@ -112,6 +111,7 @@ const handleCardDetail = (data) => {
     const day = String(date.getDate()).padStart(2, '0')
     cardDetail.value.end_time = `${year}-${month}-${day}`
 }
+
 const handleSearch = () => {
     console.log('Search text:', searchText.value);
 };

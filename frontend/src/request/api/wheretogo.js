@@ -23,3 +23,11 @@ export function DeleteRequestReq(d) {
         data: d,
     });
 }
+
+export function UpdateRequestReq(d) {
+    return request({
+        url: 'request_update',
+        method: 'post',
+        data: d,
+    });
+}
