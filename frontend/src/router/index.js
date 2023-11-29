@@ -17,7 +17,7 @@ const routes = [
       {
         path: "wheretogo",
         name: "WhereToGo",
-        component: () => import('@/views/wheretogo.vue'),
+        component: () => import('@/views/wheretogo/wheretogo.vue'),
         meta: { title: "寻去处" },
       },
       {
