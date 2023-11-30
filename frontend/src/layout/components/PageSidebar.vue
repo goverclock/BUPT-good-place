@@ -10,13 +10,15 @@
                 <el-icon>
                     <location />
                 </el-icon>
-                <span>寻去处</span>
+                <span>我发布的</span>
             </el-menu-item>
-            <el-menu-item index="3">
-                <el-icon><icon-menu /></el-icon>
-                <span>欢迎来</span>
+            <el-menu-item index="/welcome">
+                <el-icon>
+                    <document-checked />
+                </el-icon>
+                <span>我要响应</span>
             </el-menu-item>
-            <el-menu-item index="4">
+            <el-menu-item index="/stat">
                 <el-icon>
                     <document />
                 </el-icon>

@@ -53,8 +53,8 @@
 import { ref } from 'vue';
 import { Picture as IconPicture } from '@element-plus/icons-vue'
 import { GetAllRequests } from '@/request/api/wheretogo'
-import PublishDialog from '@/views/wheretogo/PublishDialog.vue'
-import CardDetailDialog from '@/views/wheretogo/CardDetailDialog.vue'
+import PublishDialog from '@/views/components/PublishDialog.vue'
+import CardDetailDialog from '@/views/components/CardDetailDialog.vue'
 
 const store = useStore()
 const userInfo = store.getters['user/userInfo'];

@@ -17,8 +17,20 @@ const routes = [
       {
         path: "wheretogo",
         name: "WhereToGo",
-        component: () => import('@/views/wheretogo/wheretogo.vue'),
-        meta: { title: "寻去处" },
+        component: () => import('@/views/wheretogo.vue'),
+        meta: { title: "我发布的" },
+      },
+      {
+        path: "welcome",
+        name: "Welcome",
+        component: () => import('@/views/welcome.vue'),
+        meta: { title: "我要响应" },
+      },
+      {
+        path: "stat",
+        name: "Statistics",
+        component: () => import('@/views/stat.vue'),
+        meta: { title: "统计数据" },
       },
       {
         path: "login",
