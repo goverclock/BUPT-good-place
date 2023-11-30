@@ -20,29 +20,9 @@
         @current-change="handlePageChange"></el-pagination>
 
     <div class="main-content">
-        <el-card :body-style="{ padding: '0px' }" v-for="item in displayedItems" :key="item.id" class="card">
-            <el-image fit="contain" :src="item.data.files[0]">
-                <template #error>
-                    <div class="image-slot">
-                        <el-icon><icon-picture /></el-icon>
-                    </div>
-                </template>
-            </el-image>
-
-            <div style="padding: 14px">
-                <el-row>
-                    <span>{{ item.title }}</span>
-                    <el-tag v-if="item.state == 0" type="info">暂无响应</el-tag>
-                    <el-tag v-else-if="item.state == 1">等待接受</el-tag>
-                    <el-tag v-else-if="item.state == 2" type="success">已接受</el-tag>
-                    <el-tag v-else type="info">已过期</el-tag>
-                </el-row>
-                <div class="bottom">
-                    <time class="time">{{ item.content }}</time>
-                    <el-button text class="button" @click="handleCardDetail(item.data)">详情</el-button>
-                </div>
-            </div>
-        </el-card>
+        <CardList :itemList="displayedItems"
+            @show="(item) => { cardDetail = getCardDetail(item); cardDetailVisible = true; }">
+        </CardList>
     </div>
 
     <PublishDialog v-model="publishDialogVisible"></PublishDialog>
@@ -51,10 +31,10 @@
 
 <script setup>
 import { ref } from 'vue';
-import { Picture as IconPicture } from '@element-plus/icons-vue'
-import { GetAllRequests } from '@/request/api/wheretogo'
+import { GetAllRequestsByUser } from '@/request/api/wheretogo'
 import PublishDialog from '@/views/components/PublishDialog.vue'
 import CardDetailDialog from '@/views/components/CardDetailDialog.vue'
+import CardList from '@/views/components/CardList.vue'
 
 const store = useStore()
 const userInfo = store.getters['user/userInfo'];
@@ -78,7 +58,7 @@ let publishDialogVisible = ref(false)
 let data = {
     user_id: userInfo.user_id,
 }
-GetAllRequests(data).then(res => {
+GetAllRequestsByUser(data).then(res => {
     let ind = 1;
     for (const d of res.data) {
         let card = {
@@ -91,7 +71,7 @@ GetAllRequests(data).then(res => {
         if (card.title.length > 20) {
             card.title = card.title.slice(0, 10) + "..."
         }
-        cardItems.value.push(card)
+        cardItems.value.push(card)  // TODO: sort
         ind++;
     }
     totalItems.value = cardItems.value.length
@@ -100,8 +80,9 @@ GetAllRequests(data).then(res => {
 // card detail dialog
 const cardDetailVisible = ref(false)
 const cardDetail = ref({})
-const handleCardDetail = (data) => {
-    cardDetailVisible.value = true
+
+const getCardDetail = (item) => {
+    let data = item.data
     let detail = {
         topic_name: data.topic_name,
         type: data.type,
@@ -113,14 +94,13 @@ const handleCardDetail = (data) => {
         request_id: data.request_id,
         state: Number(data.state),
     }
-    // console.log(data)
-    cardDetail.value = detail
 
-    const date = new Date(cardDetail.value.end_time * 1000)
+    const date = new Date(detail.end_time * 1000)
     const year = date.getFullYear()
     const month = String(date.getMonth() + 1).padStart(2, '0')
     const day = String(date.getDate()).padStart(2, '0')
-    cardDetail.value.end_time = `${year}-${month}-${day}`
+    detail.end_time = `${year}-${month}-${day}`
+    return detail
 }
 
 const handleSearch = () => {
@@ -138,28 +118,6 @@ const handlePageChange = (newPage) => {
 </script>
 
 <style scoped>
-.el-image {
-    max-width: 300px;
-    max-height: 200px;
-    width: 100%;
-    height: 200px;
-}
-
-.image-slot {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background: var(--el-fill-color-light);
-    color: var(--el-text-color-secondary);
-    font-size: 30px;
-}
-
-.image-slot .el-icon {
-    font-size: 30px;
-}
-
 .top {
     display: flex;
     align-items: center;
@@ -172,27 +130,11 @@ const handlePageChange = (newPage) => {
     flex-wrap: wrap;
 }
 
-.card {
-    width: calc(300px - 20px);
-    margin: 10px;
-}
-
 .pagination {
     margin-top: 20px;
     text-align: center;
 }
 
-.time {
-    font-size: 12px;
-    color: #999;
-}
-
-.bottom {
-    line-height: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
 
 .space {
     margin-right: 10px;

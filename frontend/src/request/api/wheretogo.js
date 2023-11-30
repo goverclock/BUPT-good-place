@@ -8,7 +8,7 @@ export function PublishPlaceReq(d) {
     });
 }
 
-export function GetAllRequests(d) {
+export function GetAllRequestsByUser(d) {
     return request({
         url: 'query_request_by_user_id',
         method: 'post',
