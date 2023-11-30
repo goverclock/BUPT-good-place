@@ -30,7 +30,13 @@
             </el-image>
 
             <div style="padding: 14px">
-                <span>{{ item.title }}</span>
+                <el-row>
+                    <span>{{ item.title }}</span>
+                    <el-tag v-if="item.state == 0" type="info">暂无响应</el-tag>
+                    <el-tag v-else-if="item.state == 1">等待接受</el-tag>
+                    <el-tag v-else-if="item.state == 2" type="success">已接受</el-tag>
+                    <el-tag v-else type="info">已过期</el-tag>
+                </el-row>
                 <div class="bottom">
                     <time class="time">{{ item.content }}</time>
                     <el-button text class="button" @click="handleCardDetail(item.data)">详情</el-button>
@@ -79,7 +85,11 @@ GetAllRequests(data).then(res => {
             id: ind,
             title: d.topic_name || '暂无标题',
             content: d.description || '暂无描述',
+            state: Number(d.state),
             data: d,
+        }
+        if (card.title.length > 20) {
+            card.title = card.title.slice(0, 10) + "..."
         }
         cardItems.value.push(card)
         ind++;
@@ -101,6 +111,7 @@ const handleCardDetail = (data) => {
         description: data.description,
         files: data.files,
         request_id: data.request_id,
+        state: Number(data.state),
     }
     // console.log(data)
     cardDetail.value = detail
