@@ -26,14 +26,14 @@
     </div>
 
     <PublishDialog v-model="publishDialogVisible"></PublishDialog>
-    <CardDetailDialog v-model="cardDetailVisible" :detail="cardDetail"></CardDetailDialog>
+    <WTGCardDetail v-model="cardDetailVisible" :detail="cardDetail"></WTGCardDetail>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import { GetAllRequestsByUser } from '@/request/api/wheretogo'
 import PublishDialog from '@/views/components/PublishDialog.vue'
-import CardDetailDialog from '@/views/components/CardDetailDialog.vue'
+import WTGCardDetail from '@/views/components/WTGCardDetail.vue'
 import CardList from '@/views/components/CardList.vue'
 
 const store = useStore()
@@ -80,7 +80,6 @@ GetAllRequestsByUser(data).then(res => {
 // card detail dialog
 const cardDetailVisible = ref(false)
 const cardDetail = ref({})
-
 const getCardDetail = (item) => {
     let data = item.data
     let detail = {

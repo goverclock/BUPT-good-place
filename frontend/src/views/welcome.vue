@@ -8,17 +8,47 @@
         @current-change="handlePageChange"></el-pagination>
 
     <div class="main-content">
-        <CardList :itemList="displayedItems" @show="showCardDetail"></CardList>
+        <CardList :itemList="displayedItems"
+            @show="(item) => { cardDetail = getCardDetail(item); cardDetailVisible = true; }">
+        </CardList>
     </div>
+
+    <WCMCardDetail v-model="cardDetailVisible" :detail="cardDetail"></WCMCardDetail>
 </template>
 
 <script setup>
-import { GetAllRequestsByCity } from '@/request/api/welcome'
+import { GetAllRequestsByCityReq } from '@/request/api/welcome'
 import CardList from '@/views/components/CardList.vue'
+import WCMCardDetail from '@/views/components/WCMCardDetail.vue'
 
 const store = useStore()
 const userInfo = store.getters['user/userInfo'];
 userInfo?.user_id || location.reload();
+
+// card detail dialog
+const cardDetailVisible = ref(false)
+const cardDetail = ref({})
+const getCardDetail = (item) => {
+    let data = item.data
+    let detail = {
+        topic_name: data.topic_name,
+        type: data.type,
+        city: data.city,
+        max_price: data.max_price,
+        end_time: data.end_time,
+        description: data.description,
+        files: data.files,
+        request_id: data.request_id,
+        state: Number(data.state),
+    }
+
+    const date = new Date(detail.end_time * 1000)
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    detail.end_time = `${year}-${month}-${day}`
+    return detail
+}
 
 // pagination
 const cardItems = ref([]);
@@ -40,7 +70,7 @@ const displayedItems = computed(() => {
 let data = {
     city: userInfo.register_city
 }
-GetAllRequestsByCity(data).then(res => {
+GetAllRequestsByCityReq(data).then(res => {
     let ind = 1;
     for (const d of res.data) {
         let card = {

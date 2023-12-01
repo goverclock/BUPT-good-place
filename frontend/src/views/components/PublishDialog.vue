@@ -126,4 +126,3 @@ const handlePublishConfirm = (value) => {
     })
 }
 </script>
-
