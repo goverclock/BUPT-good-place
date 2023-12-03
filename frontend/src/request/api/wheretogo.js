@@ -16,6 +16,14 @@ export function GetAllRequestsByUser(d) {
     });
 }
 
+export function GetResponseByRequestId(d) {
+    return request({
+        url: 'query_response_by_requestid',
+        method: 'post',
+        data: d,
+    });
+}
+
 export function DeleteRequestReq(d) {
     return request({
         url: 'request_delete',

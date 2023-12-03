@@ -8,9 +8,17 @@ export function GetAllRequestsByCityReq(d) {
     });
 }
 
-export function SubmitWelcomeReq(d) {
+export function SubmitResponseReq(d) {
     return request({
         url: 'response',
+        method: 'post',
+        data: d,
+    });
+}
+
+export function DeleteResponseReq(d) {
+    return request({
+        url: 'response_delete',
         method: 'post',
         data: d,
     });

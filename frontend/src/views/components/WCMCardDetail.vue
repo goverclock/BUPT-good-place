@@ -33,20 +33,37 @@
         </div>
 
         <template #footer>
-            <span v-if="!editing" class="dialog-footer">
+            <div v-if="hasResponse">
+                <el-divider></el-divider>
+                <el-descriptions title="我的响应" :column="1">
+                    <el-descriptions-item label="响应描述">{{ props.detail.response[0].description }}</el-descriptions-item>
+                    <el-descriptions-item label="附件">
+                        <ul>
+                            <li v-for="(file, index) in props.detail.response[0].files" :key="index">
+                                <el-link type="primary" :href="file" target="_blank" download>附件 {{ index + 1 }}</el-link>
+                            </li>
+                        </ul>
+                    </el-descriptions-item>
+                </el-descriptions>
+                <el-button type="primary" plain @click="">修改响应</el-button>
+                <el-button type="danger" plain @click="deleteResponse">删除响应</el-button>
+            </div>
+            <span v-else-if="!editing" class="dialog-footer">
                 <el-button type="primary" plain @click="editing = true">欢迎来</el-button>
             </span>
             <span v-else class="dialog-footer">
-                <el-button type="success" plain @click="submitWelcome">提交</el-button>
+                <el-button type="success" plain @click="submitResponse">提交</el-button>
                 <el-button type="danger" plain @click="editing = false">取消</el-button>
             </span>
+
         </template>
     </el-dialog>
 </template>
 
 <script setup>
-import { SubmitWelcomeReq } from '@/request/api/welcome'
+import { SubmitResponseReq, DeleteResponseReq } from '@/request/api/welcome'
 import { ElMessage } from 'element-plus';
+import { watchEffect } from 'vue';
 
 const props = defineProps(['detail'])
 
@@ -54,7 +71,11 @@ const store = useStore()
 const userInfo = store.getters['user/userInfo'];
 
 const visible = ref(false)
-const editing = ref(true)
+const editing = ref(false)
+const hasResponse = ref(false)
+watchEffect(() => {
+    hasResponse.value = props.detail.response?.length != 0
+})
 
 const formRef = ref();
 const form = reactive({
@@ -70,8 +91,16 @@ const rules = computed(() => {
     }
 });
 
+const deleteResponse = () => {
+    DeleteResponseReq({
+        response_id: props.detail.response[0].response_id
+    }).then(res => {
+        ElMessage({ message: "响应已删除!", type: "success" })
+    })
+}
+
 const fileList = []
-const submitWelcome = (value) => {
+const submitResponse = (value) => {
     formRef.value.validate((valid) => {
         if (!valid) return;
         let data = {
@@ -87,9 +116,10 @@ const submitWelcome = (value) => {
             fd.append(`files`, file.raw)
         })
 
-        SubmitWelcomeReq(fd)
+        SubmitResponseReq(fd)
             .then(res => {
-                ElMessage({ message: "响应已提交!", type: "success" });
+                ElMessage({ message: "响应已提交!", type: "success" })
+                editing = false
             })
     })
 }

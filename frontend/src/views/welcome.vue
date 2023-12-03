@@ -9,7 +9,7 @@
 
     <div class="main-content">
         <CardList :itemList="displayedItems"
-            @show="(item) => { cardDetail = getCardDetail(item); cardDetailVisible = true; }">
+            @show="async (item) => { cardDetailVisible = true; cardDetail = { response: [] }; cardDetail = await getCardDetail(item); }">
         </CardList>
     </div>
 
@@ -18,6 +18,7 @@
 
 <script setup>
 import { GetAllRequestsByCityReq } from '@/request/api/welcome'
+import { GetResponseByRequestId } from '@/request/api/wheretogo'
 import CardList from '@/views/components/CardList.vue'
 import WCMCardDetail from '@/views/components/WCMCardDetail.vue'
 
@@ -28,7 +29,7 @@ userInfo?.user_id || location.reload();
 // card detail dialog
 const cardDetailVisible = ref(false)
 const cardDetail = ref({})
-const getCardDetail = (item) => {
+const getCardDetail = async (item) => {
     let data = item.data
     let detail = {
         topic_name: data.topic_name,
@@ -41,6 +42,15 @@ const getCardDetail = (item) => {
         request_id: data.request_id,
         state: Number(data.state),
     }
+
+    async function getResponse() {
+        try {
+            const resp = await GetResponseByRequestId({ request_id: detail.request_id });
+            detail.response = resp.data
+        } catch {
+        }
+    }
+    await getResponse()
 
     const date = new Date(detail.end_time * 1000)
     const year = date.getFullYear()
