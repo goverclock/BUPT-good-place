@@ -23,7 +23,8 @@
                     style="margin-right: 100px;" />
             </el-form-item>
             <el-form-item label="结束日期" prop="end_time" label-width="140px">
-                <el-date-picker v-model="form.end_time" placeholder="选择请求结束日期" style="margin-right: 100px;" />
+                <el-date-picker v-model="form.end_time" :disabled-date="disabledDate" placeholder="选择请求结束日期"
+                    style="margin-right: 100px;" />
             </el-form-item>
             <el-form-item label="简介" label-width="140px">
                 <el-input v-model="form.desc" placeholder="输入简介" type="textarea" style="margin-right: 100px;" />
@@ -70,15 +71,20 @@ function handleAddrChange(e) {
 
 const visible = ref(false)
 const formRef = ref();
+let next_day = new Date();
+next_day.setDate(next_day.getDate() + 1)
 const form = reactive({
     topic_name: '',
     type: '钓鱼',
     desc: '',
     city: '',
     max_price: 0,
-    end_time: Date(),
+    end_time: next_day,
 })
 
+const disabledDate = (t) => {
+    // return t.getTime() < Date.now() // TODO: uncomment
+}
 const rules = computed(() => {
     return {
         topic_name: {

@@ -74,10 +74,15 @@ import { DeleteRequestReq, UpdateRequestReq } from '@/request/api/wheretogo'
 import { ElMessage } from 'element-plus';
 import cityData from '@/assets/pca-code.json'
 
+const props = defineProps(['detail'])
+
 const visible = ref(false)
 const editing = ref(false)
+const hasResponse = ref(false)
+watchEffect(() => {
+    hasResponse.value = props.detail.response?.length != 0
+})
 
-const props = defineProps(['detail'])
 const handleDelete = (req_id) => {
     let data = {
         request_id: req_id,

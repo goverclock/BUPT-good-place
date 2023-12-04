@@ -19,13 +19,14 @@
         @current-change="handlePageChange"></el-pagination>
 
     <div class="main-content">
+
         <CardList :itemList="displayedItems"
-            @show="(item) => { cardDetail = getCardDetail(item); cardDetailVisible = true; }">
+            @show="async (item) => { cardDetailVisible = true; cardDetail = { response: [] }; cardDetail = await getCardDetail(item); }">
         </CardList>
     </div>
 
     <PublishDialog v-model="publishDialogVisible" @off="publishDialogVisible = false"></PublishDialog>
-    <WTGCardDetail v-model="cardDetailVisible" :detail="cardDetail"></WTGCardDetail>
+    <WTGCardDetail v-model="cardDetailVisible" @off="cardDetailVisible = false" :detail="cardDetail"></WTGCardDetail>
 </template>
 
 <script setup>
@@ -79,7 +80,7 @@ GetAllRequestsByUser(data).then(res => {
 // card detail dialog
 const cardDetailVisible = ref(false)
 const cardDetail = ref({})
-const getCardDetail = (item) => {
+const getCardDetail = async (item) => {
     let data = item.data
     let detail = {
         topic_name: data.topic_name,
@@ -92,6 +93,15 @@ const getCardDetail = (item) => {
         request_id: data.request_id,
         state: Number(data.state),
     }
+
+    async function getResponse() {
+        try {
+            const resp = await GetResponseByRequestId({ request_id: detail.request_id });
+            detail.response = resp.data
+        } catch {
+        }
+    }
+    await getResponse()
 
     const date = new Date(detail.end_time * 1000)
     const year = date.getFullYear()

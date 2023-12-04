@@ -108,20 +108,19 @@ const fileList = []
 const submitResponse = (value) => {
     formRef.value.validate((valid) => {
         if (!valid) return;
-        let data = {
-            request_id: props.detail.request_id,
-            user_id: userInfo.user_id,
-            description: form.desc,
-        }
-        let fd = new FormData();
-        Object.keys(data).forEach(key => {
-            fd.append(key, data[key])
-        })
-        fileList.forEach((file, index) => {
-            fd.append(`files`, file.raw)
-        })
 
         if (hasResponse.value) {
+            let data = {
+                response_id: props.detail.response[0].response_id,
+                description: form.desc,
+            }
+            let fd = new FormData();
+            Object.keys(data).forEach(key => {
+                fd.append(key, data[key])
+            })
+            fileList.forEach((file, index) => {
+                fd.append(`files`, file.raw)
+            })
             UpdateResponseReq(fd)
                 .then(res => {
                     ElMessage({ message: "响应已更新!", type: "success" })
@@ -129,6 +128,19 @@ const submitResponse = (value) => {
                     emit('off')
                 })
         } else {
+            let data = {
+                request_id: props.detail.request_id,
+                user_id: userInfo.user_id,
+                description: form.desc,
+            }
+            let fd = new FormData();
+            Object.keys(data).forEach(key => {
+                fd.append(key, data[key])
+            })
+            fileList.forEach((file, index) => {
+                fd.append(`files`, file.raw)
+            })
+
             SubmitResponseReq(fd)
                 .then(res => {
                     ElMessage({ message: "响应已提交!", type: "success" })
