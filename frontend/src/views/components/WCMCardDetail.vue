@@ -15,7 +15,7 @@
             </el-descriptions-item>
         </el-descriptions>
 
-        <div v-if="editing">
+        <div v-if="editing && !hasResponse">
             <el-divider />
             <h3>填写响应信息</h3>
             <el-form ref="formRef" :model="form" :rules="rules">
@@ -45,7 +45,7 @@
                         </ul>
                     </el-descriptions-item>
                 </el-descriptions>
-                <el-button type="primary" plain @click="">修改响应</el-button>
+                <el-button type="primary" plain @click="hasResponse = false; editing = true">修改响应</el-button>
                 <el-button type="danger" plain @click="deleteResponse">删除响应</el-button>
             </div>
             <span v-else-if="!editing" class="dialog-footer">
@@ -53,7 +53,7 @@
             </span>
             <span v-else class="dialog-footer">
                 <el-button type="success" plain @click="submitResponse">提交</el-button>
-                <el-button type="danger" plain @click="editing = false">取消</el-button>
+                <el-button type="danger" plain @click="$emit('off')">取消</el-button>
             </span>
 
         </template>
@@ -66,6 +66,7 @@ import { ElMessage } from 'element-plus';
 import { watchEffect } from 'vue';
 
 const props = defineProps(['detail'])
+const emit = defineEmits(['off'])
 
 const store = useStore()
 const userInfo = store.getters['user/userInfo'];
@@ -96,6 +97,10 @@ const deleteResponse = () => {
         response_id: props.detail.response[0].response_id
     }).then(res => {
         ElMessage({ message: "响应已删除!", type: "success" })
+        editing.value = false
+        hasResponse.value = false
+        visible.value = false
+        console.log(visible.value)
     })
 }
 
@@ -119,7 +124,8 @@ const submitResponse = (value) => {
         SubmitResponseReq(fd)
             .then(res => {
                 ElMessage({ message: "响应已提交!", type: "success" })
-                editing = false
+                editing.value = false
+                visible.value = false
             })
     })
 }

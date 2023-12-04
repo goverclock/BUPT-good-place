@@ -13,7 +13,7 @@
         </CardList>
     </div>
 
-    <WCMCardDetail v-model="cardDetailVisible" :detail="cardDetail"></WCMCardDetail>
+    <WCMCardDetail v-model="cardDetailVisible" @off="cardDetailVisible = false" :detail="cardDetail"></WCMCardDetail>
 </template>
 
 <script setup>
