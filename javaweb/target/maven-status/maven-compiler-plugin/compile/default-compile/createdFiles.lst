@@ -14,7 +14,6 @@ org\example\service\impl\GoodPlaceImpl.class
 org\example\service\UserService.class
 org\example\users\User.class
 org\example\controller\GoodPlaceController.class
-org\example\work\FinishTable.class
 org\example\map\WelcomeMapper.class
 org\example\controller\UserController.class
 org\example\controller\AdminController.class

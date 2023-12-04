@@ -6,7 +6,7 @@ public class Welcome {
     private String user_id;
     private String description;
     private String file_dir;
-    private String create_time;
+    private long create_time;
     private String change_time;
     private String state;
 
@@ -24,7 +24,7 @@ public class Welcome {
                 '}';
     }
 
-    public Welcome(String response_id, String request_id, String user_id, String description, String file_dir, String create_time, String change_time, String state) {
+    public Welcome(String response_id, String request_id, String user_id, String description, String file_dir, long create_time, String change_time, String state) {
         this.response_id = response_id;
         this.request_id = request_id;
         this.user_id = user_id;
@@ -78,11 +78,11 @@ public class Welcome {
         this.file_dir = file_dir;
     }
 
-    public String getCreate_time() {
+    public long getCreate_time() {
         return create_time;
     }
 
-    public void setCreate_time(String create_time) {
+    public void setCreate_time(long create_time) {
         this.create_time = create_time;
     }
 
@@ -100,5 +100,8 @@ public class Welcome {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public void update_state(String response_id) {
     }
 }

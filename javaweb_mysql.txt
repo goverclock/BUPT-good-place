@@ -56,5 +56,5 @@ create table incometable(
 
 insert into users_information set user_id='admin', password='admin';
 insert into users_information set user_id='UserTest01', password='UserTest01';
-insert into goodplaces set user_id='UserTest01', request_id='1';
+insert into goodplaces set user_id='UserTest01', request_id='1',end_time='2025-12-12',city='天津市-市辖区-河西区',type='钓鱼',state='0',topic_name='123';
 

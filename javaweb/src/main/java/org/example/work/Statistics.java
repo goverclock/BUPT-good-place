@@ -1,9 +1,9 @@
 package org.example.work;
 
 public class Statistics {
-    private String date;//YYYYMM
-    private String count;//成交数量
-    private String agency_fee;
+    private String date;//YYYY-MM
+    private long count;//成交数量
+    private long agency_fee;
 
     @Override
     public String toString() {
@@ -17,7 +17,7 @@ public class Statistics {
     public Statistics() {
     }
 
-    public Statistics(String date, String count, String agency_fee) {
+    public Statistics(String date, long count, long agency_fee) {
         this.date = date;
         this.count = count;
         this.agency_fee = agency_fee;
@@ -31,19 +31,19 @@ public class Statistics {
         this.date = date;
     }
 
-    public String getCount() {
+    public long getCount() {
         return count;
     }
 
-    public void setCount(String count) {
+    public void setCount(long count) {
         this.count = count;
     }
 
-    public String getAgency_fee() {
+    public long getAgency_fee() {
         return agency_fee;
     }
 
-    public void setAgency_fee(String agency_fee) {
+    public void setAgency_fee(long agency_fee) {
         this.agency_fee = agency_fee;
     }
 }

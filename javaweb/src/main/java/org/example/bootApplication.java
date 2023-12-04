@@ -9,7 +9,6 @@ import java.util.List;
 
 @SpringBootApplication
 public class bootApplication {
-
     public static void main(String[] arg){
         SpringApplication.run(bootApplication.class,arg);
     }
