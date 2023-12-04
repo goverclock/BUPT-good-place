@@ -15,9 +15,10 @@
             </el-descriptions-item>
         </el-descriptions>
 
-        <div v-if="editing && !hasResponse">
+        <div v-if="editing">
             <el-divider />
-            <h3>填写响应信息</h3>
+            <h3 v-if="hasResponse">更新响应信息</h3>
+            <h3 v-else>填写响应信息</h3>
             <el-form ref="formRef" :model="form" :rules="rules">
                 <el-form-item label="简介" prop="desc" label-width="140px">
                     <el-input v-model="form.desc" placeholder="输入简介" type="textarea" style="margin-right: 100px;" />
@@ -33,7 +34,7 @@
         </div>
 
         <template #footer>
-            <div v-if="hasResponse">
+            <div v-if="hasResponse && !editing">
                 <el-divider></el-divider>
                 <el-descriptions title="我的响应" :column="1">
                     <el-descriptions-item label="响应描述">{{ props.detail.response[0].description }}</el-descriptions-item>
@@ -45,7 +46,7 @@
                         </ul>
                     </el-descriptions-item>
                 </el-descriptions>
-                <el-button type="primary" plain @click="hasResponse = false; editing = true">修改响应</el-button>
+                <el-button type="primary" plain @click="editing = true">修改响应</el-button>
                 <el-button type="danger" plain @click="deleteResponse">删除响应</el-button>
             </div>
             <span v-else-if="!editing" class="dialog-footer">
@@ -53,7 +54,7 @@
             </span>
             <span v-else class="dialog-footer">
                 <el-button type="success" plain @click="submitResponse">提交</el-button>
-                <el-button type="danger" plain @click="$emit('off')">取消</el-button>
+                <el-button type="danger" plain @click="editing = false">取消</el-button>
             </span>
 
         </template>
@@ -61,7 +62,7 @@
 </template>
 
 <script setup>
-import { SubmitResponseReq, DeleteResponseReq } from '@/request/api/welcome'
+import { SubmitResponseReq, DeleteResponseReq, UpdateResponseReq } from '@/request/api/welcome'
 import { ElMessage } from 'element-plus';
 import { watchEffect } from 'vue';
 
@@ -99,8 +100,7 @@ const deleteResponse = () => {
         ElMessage({ message: "响应已删除!", type: "success" })
         editing.value = false
         hasResponse.value = false
-        visible.value = false
-        console.log(visible.value)
+        emit('off')
     })
 }
 
@@ -121,12 +121,21 @@ const submitResponse = (value) => {
             fd.append(`files`, file.raw)
         })
 
-        SubmitResponseReq(fd)
-            .then(res => {
-                ElMessage({ message: "响应已提交!", type: "success" })
-                editing.value = false
-                visible.value = false
-            })
+        if (hasResponse.value) {
+            UpdateResponseReq(fd)
+                .then(res => {
+                    ElMessage({ message: "响应已更新!", type: "success" })
+                    editing.value = false
+                    emit('off')
+                })
+        } else {
+            SubmitResponseReq(fd)
+                .then(res => {
+                    ElMessage({ message: "响应已提交!", type: "success" })
+                    editing.value = false
+                    emit('off')
+                })
+        }
     })
 }
 </script>

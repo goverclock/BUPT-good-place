@@ -54,6 +54,7 @@ import cityData from '@/assets/pca-code.json'
 
 const store = useStore()
 const userInfo = store.getters['user/userInfo'];
+const emit = defineEmits(['off'])
 
 let city = {
     value: 'code',
@@ -118,10 +119,14 @@ const handlePublishConfirm = (value) => {
         fileList.forEach((file, index) => {
             fd.append(`files`, file.raw)
         })
+        if (fileList.length == 0) {
+            fd.append('files', '')
+        }
 
         PublishPlaceReq(fd)
             .then(res => {
                 ElMessage({ message: "发布成功!", type: "success" });
+                emit('off')
             })
     })
 }

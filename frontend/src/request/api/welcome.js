@@ -23,3 +23,11 @@ export function DeleteResponseReq(d) {
         data: d,
     });
 }
+
+export function UpdateResponseReq(d) {
+    return request({
+        url: 'response_update',
+        method: 'post',
+        data: d,
+    });
+}

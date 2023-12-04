@@ -24,7 +24,7 @@
         </CardList>
     </div>
 
-    <PublishDialog v-model="publishDialogVisible"></PublishDialog>
+    <PublishDialog v-model="publishDialogVisible" @off="publishDialogVisible = false"></PublishDialog>
     <WTGCardDetail v-model="cardDetailVisible" :detail="cardDetail"></WTGCardDetail>
 </template>
 
