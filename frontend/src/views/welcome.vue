@@ -9,7 +9,7 @@
 
     <div class="main-content">
         <CardList :itemList="displayedItems"
-            @show="async (item) => { cardDetailVisible = true; cardDetail = { response: [] }; cardDetail = await getCardDetail(item); }">
+            @show="async (item) => { cardDetailVisible = true; cardDetail = { response: [] }; cardDetail = await getCardDetail(item); console.log(cardDetail) }">
         </CardList>
     </div>
 
@@ -47,7 +47,8 @@ const getCardDetail = async (item) => {
         try {
             const resp = await GetResponseByRequestId({ request_id: detail.request_id });
             detail.response = resp.data
-        } catch {
+        } catch (e) {
+            console.error(e)
         }
     }
     await getResponse()
@@ -65,11 +66,9 @@ const cardItems = ref([]);
 const totalItems = ref(cardItems.value.length);
 const pageSize = ref(4);
 const currentPage = ref(1);
-
 const handlePageChange = (newPage) => {
     currentPage.value = newPage;
 };
-
 const displayedItems = computed(() => {
     const start = (currentPage.value - 1) * pageSize.value;
     const end = start + pageSize.value;
@@ -77,10 +76,9 @@ const displayedItems = computed(() => {
 });
 
 // request
-let data = {
+GetAllRequestsByCityReq({
     city: userInfo.register_city
-}
-GetAllRequestsByCityReq(data).then(res => {
+}).then(res => {
     let ind = 1;
     for (const d of res.data) {
         let card = {

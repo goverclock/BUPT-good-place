@@ -19,7 +19,6 @@
         @current-change="handlePageChange"></el-pagination>
 
     <div class="main-content">
-
         <CardList :itemList="displayedItems"
             @show="async (item) => { cardDetailVisible = true; cardDetail = { response: [] }; cardDetail = await getCardDetail(item); }">
         </CardList>
@@ -31,7 +30,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import { GetAllRequestsByUser } from '@/request/api/wheretogo'
+import { GetResponseByRequestId, GetAllRequestsByUser } from '@/request/api/wheretogo'
 import PublishDialog from '@/views/components/PublishDialog.vue'
 import WTGCardDetail from '@/views/components/WTGCardDetail.vue'
 import CardList from '@/views/components/CardList.vue'
@@ -40,42 +39,7 @@ const store = useStore()
 const userInfo = store.getters['user/userInfo'];
 userInfo?.user_id || location.reload();
 
-const searchText = ref('');
-const selectedOption = ref('');
-
-const cardItems = ref([]);
-const totalItems = ref(cardItems.value.length);
-const pageSize = ref(4);
-const currentPage = ref(1);
-const displayedItems = computed(() => {
-    const start = (currentPage.value - 1) * pageSize.value;
-    const end = start + pageSize.value;
-    return cardItems.value.slice(start, end);
-});
-
 let publishDialogVisible = ref(false)
-
-let data = {
-    user_id: userInfo.user_id,
-}
-GetAllRequestsByUser(data).then(res => {
-    let ind = 1;
-    for (const d of res.data) {
-        let card = {
-            id: ind,
-            title: d.topic_name || '暂无标题',
-            content: d.description || '暂无描述',
-            state: Number(d.state),
-            data: d,
-        }
-        if (card.title.length > 20) {
-            card.title = card.title.slice(0, 10) + "..."
-        }
-        cardItems.value.push(card)  // TODO: sort
-        ind++;
-    }
-    totalItems.value = cardItems.value.length
-})
 
 // card detail dialog
 const cardDetailVisible = ref(false)
@@ -98,7 +62,8 @@ const getCardDetail = async (item) => {
         try {
             const resp = await GetResponseByRequestId({ request_id: detail.request_id });
             detail.response = resp.data
-        } catch {
+        } catch (e) {
+            console.error(e)
         }
     }
     await getResponse()
@@ -111,16 +76,52 @@ const getCardDetail = async (item) => {
     return detail
 }
 
+// TODO: search and filter
+const searchText = ref('');
+const selectedOption = ref('');
+
+// pagination
+const cardItems = ref([]);
+const totalItems = ref(cardItems.value.length);
+const pageSize = ref(4);
+const currentPage = ref(1);
+const handlePageChange = (newPage) => {
+    currentPage.value = newPage;
+};
+const displayedItems = computed(() => {
+    const start = (currentPage.value - 1) * pageSize.value;
+    const end = start + pageSize.value;
+    return cardItems.value.slice(start, end);
+});
+
+// requests
+GetAllRequestsByUser({
+    user_id: userInfo.user_id,
+}).then(res => {
+    let ind = 1;
+    for (const d of res.data) {
+        let card = {
+            id: ind,
+            title: d.topic_name || '暂无标题',
+            content: d.description || '暂无描述',
+            state: Number(d.state),
+            data: d,
+        }
+        if (card.title.length > 20) {
+            card.title = card.title.slice(0, 10) + "..."
+        }
+        cardItems.value.push(card)  // TODO: sort
+        ind++;
+    }
+    totalItems.value = cardItems.value.length
+})
+
 const handleSearch = () => {
     console.log('Search text:', searchText.value);
 };
 
 const handleSelectChange = (value) => {
     console.log('Selected category:', value);
-};
-
-const handlePageChange = (newPage) => {
-    currentPage.value = newPage;
 };
 
 </script>
