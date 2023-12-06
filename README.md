@@ -50,7 +50,7 @@ public class Welcome {
     private List<String> files;
     private long create_time;
     private String change_time;
-    private String state;//0表示已发布响应还未接受  1表示响应已被请求方接受
+    private String state;//0表示已发布响应还未接受  1表示响应已被请求方接受 2表示已被拒绝
 }
 ```
 
@@ -416,9 +416,27 @@ return:
 
 }
 
+8.用户拒绝欢迎来响应（新增）
+
+Path:"/reject_response"
+
+{
+
+​	String  response_id;
+
+}
+
+return:{
+
+​	int  code;
+
+​	String  msg;//失败的原因（该响应已被接收）
+
+​	data   null;
 
 
 
+}
 
 
 
