@@ -60,7 +60,8 @@
                 <el-button type="danger" plain @click="deleteResponse">删除我的响应</el-button>
             </div>
             <span v-else-if="!editing" class="dialog-footer">
-                <el-button type="primary" plain @click="editing = true">欢迎来</el-button>
+                <el-button type="primary" plain :disabled="(() => { return props.detail.user_id == userInfo.user_id })()"
+                    @click="editing = true">欢迎来</el-button>
             </span>
             <span v-else class="dialog-footer">
                 <el-button type="success" plain @click="submitResponse">提交</el-button>
@@ -121,6 +122,7 @@ const deleteResponse = () => {
         editing.value = false
         hasResponse.value = false
         emit('off')
+        setTimeout(() => { location.reload() }, 1000)
     })
 }
 
@@ -146,6 +148,7 @@ const submitResponse = (value) => {
                     ElMessage({ message: "响应已更新!", type: "success" })
                     editing.value = false
                     emit('off')
+                    setTimeout(() => { location.reload() }, 1000)
                 })
         } else {
             let data = {
@@ -166,6 +169,7 @@ const submitResponse = (value) => {
                     ElMessage({ message: "响应已提交!", type: "success" })
                     editing.value = false
                     emit('off')
+                    setTimeout(() => { location.reload() }, 1000)
                 })
         }
     })

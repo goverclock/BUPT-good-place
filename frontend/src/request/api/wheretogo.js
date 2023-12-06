@@ -39,3 +39,11 @@ export function UpdateRequestReq(d) {
         data: d,
     });
 }
+
+export function AcceptResponseReq(d) {
+    return request({
+        url: 'accept_response',
+        method: 'post',
+        data: d,
+    });
+}
