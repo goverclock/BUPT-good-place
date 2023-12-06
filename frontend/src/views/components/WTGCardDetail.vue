@@ -56,7 +56,7 @@
 
         <!-- responses -->
         <el-collapse v-if="!editing" v-model="showingResponse">
-            <el-collapse-item v-for="resp in props.detail.response" :title="'来自用户 ' + resp.user_id + ' 的响应'"
+            <el-collapse-item v-for="resp in  props.detail.response " :title="'来自用户 ' + resp.user_id + ' 的响应'"
                 :name="resp.user_id">
                 <template v-if="resp.user_id == userInfo.user_id" #title>
                     来自用户 {{ resp.user_id }} 的响应<el-tag>我的响应</el-tag>
@@ -71,32 +71,37 @@
                         </ul>
                     </el-descriptions-item>
                 </el-descriptions>
+                <div v-if="props.detail.state != 2">
+                    <el-button type="success" plain @click="acceptResp(resp.response_id)">接受</el-button>
+                    <el-button type="danger" plain @click="() => { console.log('deny', resp.response_id) }">拒绝</el-button>
+                </div>
             </el-collapse-item>
         </el-collapse>
 
         <template #footer>
             <span v-if="!editing" class="dialog-footer">
-                <el-button type="primary" plain @click="beginEditing">修改</el-button>
-                <el-button type="danger" plain @click="handleDelete(props.detail.request_id)">
-                    删除
-                </el-button>
+                <el-button type="primary" plain :disabled="hasResponse" @click="beginEditing">修改请求</el-button>
+                <el-button type="danger" plain :disabled="hasResponse"
+                    @click="handleDelete(props.detail.request_id)">删除请求</el-button>
             </span>
             <span v-else class="dialog-footer">
                 <el-button type="success" plain @click="confirmEdit">完成</el-button>
-                <el-button type="danger" plain @click="editing = false">
-                    取消
-                </el-button>
+                <el-button type="danger" plain @click="editing = false">取消</el-button>
             </span>
         </template>
     </el-dialog>
 </template>
 
 <script setup>
-import { DeleteRequestReq, UpdateRequestReq } from '@/request/api/wheretogo'
+import { DeleteRequestReq, UpdateRequestReq, AcceptResponseReq } from '@/request/api/wheretogo'
 import { ElMessage } from 'element-plus';
 import cityData from '@/assets/pca-code.json'
 
 const props = defineProps(['detail'])
+const emit = defineEmits(['off'])
+
+const store = useStore()
+const userInfo = store.getters['user/userInfo'];
 
 const visible = ref(false)
 const editing = ref(false)
@@ -104,20 +109,25 @@ const hasResponse = ref(false)
 const hasMyResponse = ref(false)
 watchEffect(() => {
     hasResponse.value = props.detail.response?.length != 0
+    hasMyResponse.value = false
+    if (hasResponse.value) {
+        for (let i = 0; i < props.detail.response?.length; i++) {
+            if (props.detail.response[i].user_id == userInfo.user_id) {
+                hasMyResponse.value = true
+                break
+            }
+        }
+    }
 })
 
 const handleDelete = (req_id) => {
-    let data = {
+    DeleteRequestReq({
         request_id: req_id,
-    }
-    DeleteRequestReq(data)
-        .then(res => {
-            ElMessage({ message: "已删除!", type: "success" });
-        })
+    }).then(res => {
+        ElMessage({ message: "已删除请求!", type: "success" });
+        emit('off')
+    })
 }
-
-const store = useStore()
-const userInfo = store.getters['user/userInfo'];
 
 let city = {
     value: 'code',
@@ -206,8 +216,19 @@ const confirmEdit = () => {
 
         UpdateRequestReq(fd)
             .then(res => {
-                ElMessage({ message: "已更新!", type: "success" });
+                ElMessage({ message: "已更新请求!", type: "success" });
+                emit('off')
             })
+    })
+}
+
+const acceptResp = (response_id) => {
+    console.log("accept", response_id)
+    AcceptResponseReq({
+        response_id: response_id
+    }).then(res => {
+        ElMessage({ message: "已接受响应!", type: "success" });
+        emit('off')
     })
 }
 
