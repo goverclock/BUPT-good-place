@@ -1,6 +1,7 @@
 <template>
     <el-dialog v-model="visible" title="寻去处详情">
         <el-descriptions :title="props.detail.topic_name" :column="1">
+            <el-descriptions-item label="发起者">{{ props.detail.user_id }}</el-descriptions-item>
             <el-descriptions-item label="类型">{{ props.detail.type }}</el-descriptions-item>
             <el-descriptions-item label="地区">{{ props.detail.city }}</el-descriptions-item>
             <el-descriptions-item label="最高单价">{{ props.detail.max_price }} 元</el-descriptions-item>
@@ -17,7 +18,7 @@
 
         <div v-if="editing">
             <el-divider />
-            <h3 v-if="hasResponse">更新响应信息</h3>
+            <h3 v-if="hasMyResponse">更新响应信息</h3>
             <h3 v-else>填写响应信息</h3>
             <el-form ref="formRef" :model="form" :rules="rules">
                 <el-form-item label="简介" prop="desc" label-width="140px">
@@ -33,21 +34,30 @@
             </el-form>
         </div>
 
-        <template #footer>
-            <div v-if="hasResponse && !editing">
-                <el-divider></el-divider>
-                <el-descriptions title="我的响应" :column="1">
-                    <el-descriptions-item label="响应描述">{{ props.detail.response[0].description }}</el-descriptions-item>
+        <!-- responses -->
+        <el-collapse v-if="!editing" v-model="showingResponse">
+            <el-collapse-item v-for="resp in props.detail.response" :title="'来自用户 ' + resp.user_id + ' 的响应'"
+                :name="resp.user_id">
+                <template v-if="resp.user_id == userInfo.user_id" #title>
+                    来自用户 {{ resp.user_id }} 的响应<el-tag>我的响应</el-tag>
+                </template>
+                <el-descriptions :column="1">
+                    <el-descriptions-item label="响应描述">{{ resp.description }}</el-descriptions-item>
                     <el-descriptions-item label="附件">
                         <ul>
-                            <li v-for="(file, index) in props.detail.response[0].files" :key="index">
+                            <li v-for="(file, index) in resp.files" :key="index">
                                 <el-link type="primary" :href="file" target="_blank" download>附件 {{ index + 1 }}</el-link>
                             </li>
                         </ul>
                     </el-descriptions-item>
                 </el-descriptions>
-                <el-button type="primary" plain @click="editing = true">修改响应</el-button>
-                <el-button type="danger" plain @click="deleteResponse">删除响应</el-button>
+            </el-collapse-item>
+        </el-collapse>
+
+        <template #footer>
+            <div v-if="hasMyResponse && !editing">
+                <el-button type="primary" plain @click="editing = true">修改我的响应</el-button>
+                <el-button type="danger" plain @click="deleteResponse">删除我的响应</el-button>
             </div>
             <span v-else-if="!editing" class="dialog-footer">
                 <el-button type="primary" plain @click="editing = true">欢迎来</el-button>
@@ -75,8 +85,18 @@ const userInfo = store.getters['user/userInfo'];
 const visible = ref(false)
 const editing = ref(false)
 const hasResponse = ref(false)
+const hasMyResponse = ref(false)
 watchEffect(() => {
     hasResponse.value = props.detail.response?.length != 0
+    hasMyResponse.value = false
+    if (hasResponse.value) {
+        for (let i = 0; i < props.detail.response?.length; i++) {
+            if (props.detail.response[i].user_id == userInfo.user_id) {
+                hasMyResponse.value = true
+                break
+            }
+        }
+    }
 })
 
 const formRef = ref();
@@ -109,7 +129,7 @@ const submitResponse = (value) => {
     formRef.value.validate((valid) => {
         if (!valid) return;
 
-        if (hasResponse.value) {
+        if (hasMyResponse.value) {
             let data = {
                 response_id: props.detail.response[0].response_id,
                 description: form.desc,
@@ -150,4 +170,7 @@ const submitResponse = (value) => {
         }
     })
 }
+
+const showingResponse = ref("")
+
 </script>

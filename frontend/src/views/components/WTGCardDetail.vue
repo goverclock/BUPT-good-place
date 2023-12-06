@@ -55,52 +55,25 @@
         </el-form>
 
         <!-- responses -->
-        <el-collapse v-if="!editing" v-model="showingResponse" accordion>
-            <el-collapse-item title="来自用户x的响应" name="1">
-                <div>
-                    Consistent with real life: in line with the process and logic of real
-                    life, and comply with languages and habits that the users are used to;
-                </div>
-                <div>
-                    Consistent within interface: all elements should be consistent, such
-                    as: design style, icons and texts, position of elements, etc.
-                </div>
-            </el-collapse-item>
-            <el-collapse-item title="Feedback" name="2">
-                <div>
-                    Operation feedback: enable the users to clearly perceive their
-                    operations by style updates and interactive effects;
-                </div>
-                <div>
-                    Visual feedback: reflect current state by updating or rearranging
-                    elements of the page.
-                </div>
-            </el-collapse-item>
-            <el-collapse-item title="Efficiency" name="3">
-                <div>
-                    Simplify the process: keep operating process simple and intuitive;
-                </div>
-                <div>
-                    Definite and clear: enunciate your intentions clearly so that the
-                    users can quickly understand and make decisions;
-                </div>
-                <div>
-                    Easy to identify: the interface should be straightforward, which helps
-                    the users to identify and frees them from memorizing and recalling.
-                </div>
-            </el-collapse-item>
-            <el-collapse-item title="Controllability" name="4">
-                <div>
-                    Decision making: giving advices about operations is acceptable, but do
-                    not make decisions for the users;
-                </div>
-                <div>
-                    Controlled consequences: users should be granted the freedom to
-                    operate, including canceling, aborting or terminating current
-                    operation.
-                </div>
+        <el-collapse v-if="!editing" v-model="showingResponse">
+            <el-collapse-item v-for="resp in props.detail.response" :title="'来自用户 ' + resp.user_id + ' 的响应'"
+                :name="resp.user_id">
+                <template v-if="resp.user_id == userInfo.user_id" #title>
+                    来自用户 {{ resp.user_id }} 的响应<el-tag>我的响应</el-tag>
+                </template>
+                <el-descriptions :column="1">
+                    <el-descriptions-item label="响应描述">{{ resp.description }}</el-descriptions-item>
+                    <el-descriptions-item label="附件">
+                        <ul>
+                            <li v-for="(file, index) in resp.files" :key="index">
+                                <el-link type="primary" :href="file" target="_blank" download>附件 {{ index + 1 }}</el-link>
+                            </li>
+                        </ul>
+                    </el-descriptions-item>
+                </el-descriptions>
             </el-collapse-item>
         </el-collapse>
+
         <template #footer>
             <span v-if="!editing" class="dialog-footer">
                 <el-button type="primary" plain @click="beginEditing">修改</el-button>
@@ -128,6 +101,7 @@ const props = defineProps(['detail'])
 const visible = ref(false)
 const editing = ref(false)
 const hasResponse = ref(false)
+const hasMyResponse = ref(false)
 watchEffect(() => {
     hasResponse.value = props.detail.response?.length != 0
 })
@@ -236,4 +210,7 @@ const confirmEdit = () => {
             })
     })
 }
+
+const showingResponse = ref("")
+
 </script>

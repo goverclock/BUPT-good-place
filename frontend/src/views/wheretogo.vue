@@ -55,6 +55,7 @@ const getCardDetail = async (item) => {
         description: data.description,
         files: data.files,
         request_id: data.request_id,
+        user_id: data.user_id,
         state: Number(data.state),
     }
 

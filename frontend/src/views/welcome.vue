@@ -9,7 +9,7 @@
 
     <div class="main-content">
         <CardList :itemList="displayedItems"
-            @show="async (item) => { cardDetailVisible = true; cardDetail = { response: [] }; cardDetail = await getCardDetail(item); console.log(cardDetail) }">
+            @show="async (item) => { cardDetailVisible = true; cardDetail = { response: [] }; cardDetail = await getCardDetail(item); }">
         </CardList>
     </div>
 
@@ -40,6 +40,7 @@ const getCardDetail = async (item) => {
         description: data.description,
         files: data.files,
         request_id: data.request_id,
+        user_id: data.user_id,
         state: Number(data.state),
     }
 
