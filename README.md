@@ -35,7 +35,7 @@ public class GoodPlace {
     private long end_time;
     private long create_time;
     private String change_time;
-    private String state;//0表示已发布还未响应   1表示已响应还未接受  2表示已接受响应
+    private String state;    // 0表示已发布还没有响应   1表示已响应还未接受  2表示已接受响应
 }
 ```
 
