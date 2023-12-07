@@ -73,7 +73,7 @@
                 </el-descriptions>
                 <div v-if="props.detail.state != 2">
                     <el-button type="success" plain @click="acceptResp(resp.response_id)">接受</el-button>
-                    <el-button type="danger" plain @click="() => { console.log('deny', resp.response_id) }">拒绝</el-button>
+                    <el-button type="danger" plain @click="rejectResp(resp.response_id)">拒绝</el-button>
                 </div>
             </el-collapse-item>
         </el-collapse>
@@ -93,7 +93,7 @@
 </template>
 
 <script setup>
-import { DeleteRequestReq, UpdateRequestReq, AcceptResponseReq } from '@/request/api/wheretogo'
+import { DeleteRequestReq, UpdateRequestReq, AcceptResponseReq, RejectResponseReq } from '@/request/api/wheretogo'
 import { ElMessage } from 'element-plus';
 import cityData from '@/assets/pca-code.json'
 
@@ -229,6 +229,15 @@ const acceptResp = (response_id) => {
     }).then(res => {
         ElMessage({ message: "已接受响应!", type: "success" });
         emit('off')
+    })
+}
+
+const rejectResp = (response_id) => {
+    console.log("reject", response_id)
+    RejectResponseReq({
+        response_id: response_id
+    }).then(res => {
+        ElMessage({ message: "已拒绝响应!", type: "message" });
     })
 }
 
