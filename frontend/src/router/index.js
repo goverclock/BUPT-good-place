@@ -4,13 +4,13 @@ import Layout from '@/layout/index.vue'
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'Root',
     component: Layout,
     meta: { title: " " },
     children: [
       {
         path: "home",
-        name: "Main",
+        name: "Home",
         component: () => import('@/views/home.vue'),
         meta: { title: "主页" },
       },
@@ -84,6 +84,14 @@ const routes = [
               requireAuth: true
             },
             component: () => import('@/views/user/detail.vue'),
+          },
+          {
+            path: 'verify',
+            name: 'UserVerify',
+            meta: {
+              requireAuth: true
+            },
+            component: () => import('@/views/user/verify.vue'),
           },
         ],
       },

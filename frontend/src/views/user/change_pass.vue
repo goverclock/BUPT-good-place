@@ -1,22 +1,20 @@
 <template>
-  <div class="detail-page">
-    <h1>修改密码</h1>
-    <el-form ref="formRef" :model="changepass_form" :rules="rules" label-position="right" label-width="70px">
-      <el-form-item label="原密码" prop="old_pass">
-        <el-input class="inline-item" v-model="changepass_form.old_pass" type="password" placeholder="输入原密码" />
-      </el-form-item>
-      <el-form-item label="新密码" prop="new_pass">
-        <el-input class="inline-item" v-model="changepass_form.new_pass" type="password" placeholder="输入新密码" />
-      </el-form-item>
-      <el-form-item prop="new_pass_repeat">
-        <el-input class="inline-item" v-model="changepass_form.new_pass_repeat" type="password" placeholder="重复新密码" />
-      </el-form-item>
-      <br>
+  <h1>修改密码</h1>
+  <el-form ref="formRef" :model="changepass_form" :rules="rules" label-position="right" label-width="70px">
+    <el-form-item label="原密码" prop="old_pass">
+      <el-input class="inline-item" v-model="changepass_form.old_pass" type="password" placeholder="输入原密码" />
+    </el-form-item>
+    <el-form-item label="新密码" prop="new_pass">
+      <el-input class="inline-item" v-model="changepass_form.new_pass" type="password" placeholder="输入新密码" />
+    </el-form-item>
+    <el-form-item prop="new_pass_repeat">
+      <el-input class="inline-item" v-model="changepass_form.new_pass_repeat" type="password" placeholder="重复新密码" />
+    </el-form-item>
+    <br>
 
-      <el-button type="success" @click="editConfirm">确认修改</el-button>
-      <el-button type="danger" plain @click="editCancel">放弃修改</el-button>
-    </el-form>
-  </div>
+    <el-button type="success" @click="editConfirm">确认修改</el-button>
+    <el-button type="danger" plain @click="editCancel">放弃修改</el-button>
+  </el-form>
 </template>
 
 <script setup>

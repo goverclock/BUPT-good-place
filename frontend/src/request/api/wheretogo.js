@@ -47,3 +47,11 @@ export function AcceptResponseReq(d) {
         data: d,
     });
 }
+
+export function RejectResponseReq(d) {
+    return request({
+        url: 'reject_response',
+        method: 'post',
+        data: d,
+    });
+}

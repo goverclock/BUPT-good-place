@@ -56,24 +56,28 @@
 
         <!-- responses -->
         <el-collapse v-if="!editing" v-model="showingResponse">
-            <el-collapse-item v-for="resp in  props.detail.response " :title="'来自用户 ' + resp.user_id + ' 的响应'"
-                :name="resp.user_id">
-                <template v-if="resp.user_id == userInfo.user_id" #title>
-                    来自用户 {{ resp.user_id }} 的响应<el-tag>我的响应</el-tag>
+            <el-collapse-item v-for="resp in props.detail.response" :name="resp.user_id">
+                <template #title>
+                    来自用户 {{ resp.user_id }} 的响应<el-tag v-if="resp.user_id == userInfo.user_id">我的响应</el-tag>
+                    <el-tag v-if="resp.state == '1'" type="success">已接受</el-tag>
+                    <el-tag v-else-if="resp.state == '2'" type="danger">已拒绝</el-tag>
                 </template>
                 <el-descriptions :column="1">
                     <el-descriptions-item label="响应描述">{{ resp.description }}</el-descriptions-item>
                     <el-descriptions-item label="附件">
                         <ul>
-                            <li v-for="(file, index) in resp.files" :key="index">
+                            <li v-for="(  file, index  ) in   resp.files  " :key="index">
                                 <el-link type="primary" :href="file" target="_blank" download>附件 {{ index + 1 }}</el-link>
                             </li>
                         </ul>
                     </el-descriptions-item>
                 </el-descriptions>
-                <div v-if="props.detail.state != 2">
-                    <el-button type="success" plain @click="acceptResp(resp.response_id)">接受</el-button>
-                    <el-button type="danger" plain @click="() => { console.log('deny', resp.response_id) }">拒绝</el-button>
+
+                <div v-if="[0, 1].includes(props.detail.state)"> <!-- 请求还没有响应,或有响应但未接受 -->
+                    <div v-if="resp.state == '0'"> <!-- 尚未被接受或拒绝的响应 -->
+                        <el-button type="success" plain @click="acceptResp(resp.response_id)">接受</el-button>
+                        <el-button type="danger" plain @click="rejectResp(resp.response_id)">拒绝</el-button>
+                    </div>
                 </div>
             </el-collapse-item>
         </el-collapse>
@@ -93,7 +97,7 @@
 </template>
 
 <script setup>
-import { DeleteRequestReq, UpdateRequestReq, AcceptResponseReq } from '@/request/api/wheretogo'
+import { DeleteRequestReq, UpdateRequestReq, AcceptResponseReq, RejectResponseReq } from '@/request/api/wheretogo'
 import { ElMessage } from 'element-plus';
 import cityData from '@/assets/pca-code.json'
 
@@ -126,6 +130,7 @@ const handleDelete = (req_id) => {
     }).then(res => {
         ElMessage({ message: "已删除请求!", type: "success" });
         emit('off')
+        setTimeout(() => { location.reload() }, 1000)
     })
 }
 
@@ -223,12 +228,20 @@ const confirmEdit = () => {
 }
 
 const acceptResp = (response_id) => {
-    console.log("accept", response_id)
     AcceptResponseReq({
         response_id: response_id
     }).then(res => {
         ElMessage({ message: "已接受响应!", type: "success" });
+        setTimeout(() => { location.reload() }, 1000)
         emit('off')
+    })
+}
+
+const rejectResp = (response_id) => {
+    RejectResponseReq({
+        response_id: response_id
+    }).then(res => {
+        ElMessage("已拒绝响应!");
     })
 }
 

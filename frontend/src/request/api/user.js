@@ -41,3 +41,11 @@ export function UpdatePasswordReq(d) {
         data: d,
     });
 }
+
+export function VerifyReq(d) {
+    return request({
+        url: 'verify',
+        method: 'post',
+        data: d,
+    });
+}

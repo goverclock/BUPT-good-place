@@ -30,8 +30,12 @@ const router = useRouter();
 const isLogin = store.getters['user/isLogin'];
 if (isLogin) {
   const routeName = route.name;
-  if (["Home", "Login"].includes(routeName)) {
-    router.push('/user/detail')
+  if (["Root", "Login"].includes(routeName)) {
+    router.push('/home')
+  }
+  const userInfo = store.getters['user/userInfo'];
+  if (userInfo.identity_id == "") {
+    router.push("/user/verify")
   }
 } else {
   router.push('/login')
