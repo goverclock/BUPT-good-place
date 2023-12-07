@@ -44,7 +44,7 @@ export function UpdatePasswordReq(d) {
 
 export function VerifyReq(d) {
     return request({
-        url: 'fuck',
+        url: 'verify',
         method: 'post',
         data: d,
     });

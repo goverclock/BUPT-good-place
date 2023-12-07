@@ -36,10 +36,11 @@
 
         <!-- responses -->
         <el-collapse v-if="!editing" v-model="showingResponse">
-            <el-collapse-item v-for="resp in props.detail.response" :title="'来自用户 ' + resp.user_id + ' 的响应'"
-                :name="resp.user_id">
-                <template v-if="resp.user_id == userInfo.user_id" #title>
-                    来自用户 {{ resp.user_id }} 的响应<el-tag>我的响应</el-tag>
+            <el-collapse-item v-for="resp in props.detail.response" :name="resp.user_id">
+                <template #title>
+                    来自用户 {{ resp.user_id }} 的响应<el-tag v-if="resp.user_id == userInfo.user_id">我的响应</el-tag>
+                    <el-tag v-if="resp.state == '1'" type="success">已接受</el-tag>
+                    <el-tag v-else-if="resp.state == '2'" type="danger">已拒绝</el-tag>
                 </template>
                 <el-descriptions :column="1">
                     <el-descriptions-item label="响应描述">{{ resp.description }}</el-descriptions-item>
@@ -56,8 +57,8 @@
 
         <template #footer>
             <div v-if="hasMyResponse && !editing">
-                <el-button type="primary" plain @click="editing = true">修改我的响应</el-button>
-                <el-button type="danger" plain @click="deleteResponse">删除我的响应</el-button>
+                <el-button type="primary" plain @click="editing = true" :disabled="!canModDelResponse()">修改我的响应</el-button>
+                <el-button type="danger" plain @click="deleteResponse" :disabled="!canModDelResponse()">删除我的响应</el-button>
             </div>
             <span v-else-if="!editing" class="dialog-footer">
                 <el-button type="primary" plain :disabled="(() => { return props.detail.user_id == userInfo.user_id })()"
@@ -87,6 +88,7 @@ const visible = ref(false)
 const editing = ref(false)
 const hasResponse = ref(false)
 const hasMyResponse = ref(false)
+const myResponse = ref({})
 watchEffect(() => {
     hasResponse.value = props.detail.response?.length != 0
     hasMyResponse.value = false
@@ -94,6 +96,7 @@ watchEffect(() => {
         for (let i = 0; i < props.detail.response?.length; i++) {
             if (props.detail.response[i].user_id == userInfo.user_id) {
                 hasMyResponse.value = true
+                myResponse.value = props.detail.response[i]
                 break
             }
         }
@@ -124,6 +127,11 @@ const deleteResponse = () => {
         emit('off')
         setTimeout(() => { location.reload() }, 1000)
     })
+}
+
+// rejected my response can't be modified or deleted
+const canModDelResponse = () => {
+    return myResponse.value.state != '2'
 }
 
 const fileList = []

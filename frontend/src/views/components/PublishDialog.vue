@@ -133,6 +133,7 @@ const handlePublishConfirm = (value) => {
             .then(res => {
                 ElMessage({ message: "发布成功!", type: "success" });
                 emit('off')
+                setTimeout(() => { location.reload() }, 1000)
             })
     })
 }
