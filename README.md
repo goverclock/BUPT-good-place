@@ -35,7 +35,7 @@ public class GoodPlace {
     private long end_time;
     private long create_time;
     private String change_time;
-    private String state;    // 0表示已发布还没有响应   1表示已响应还未接受  2表示已接受响应
+    private String state;    // 0表示已发布还没有响应    1表示已有响应还未接受    2表示已接受响应    3表示已过期
 }
 ```
 
@@ -50,7 +50,7 @@ public class Welcome {
     private List<String> files;
     private long create_time;
     private String change_time;
-    private String state;//0表示已发布响应还未接受  1表示响应已被请求方接受 2表示已被拒绝
+    private String state;    // 0表示已发布响应还未接受  1表示响应已被请求方接受 2表示已被拒绝
 }
 ```
 
