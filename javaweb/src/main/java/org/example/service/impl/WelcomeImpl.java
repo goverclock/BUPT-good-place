@@ -1,17 +1,14 @@
 package org.example.service.impl;
 
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.example.map.WelcomeMapper;
 import org.example.oss.OSS;
 import org.example.service.WelcomeService;
-import org.example.work.GoodPlace;
 import org.example.work.Welcome;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -134,7 +131,7 @@ public class WelcomeImpl implements WelcomeService {
     }
 
     @Override
-    public int update_state(String response_id) {
-        return welcomeMapper.update_state(response_id,"1");
+    public int update_state(String response_id, String state) {
+        return welcomeMapper.update_state(response_id,state);
     }
 }

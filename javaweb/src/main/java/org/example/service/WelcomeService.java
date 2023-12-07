@@ -17,5 +17,5 @@ public interface WelcomeService {
 
      int response_delete(String response_id) throws Exception;
 
-    int update_state(String response_id);
+    int update_state(String response_id, String state);
 }

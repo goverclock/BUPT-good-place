@@ -186,6 +186,11 @@ public class GoodPlaceImpl implements GoodPlaceService {
             }
 
         }
+        else if(state.equals("0")){
+            if(goodPlace.getState().equals("1")){
+                goodPlaceMapper.update_state(request_id, "0");
+            }
+        }
         return 1;
     }
 

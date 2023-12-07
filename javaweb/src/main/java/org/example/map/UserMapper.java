@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.example.users.User;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -39,4 +38,8 @@ public interface UserMapper {
 
     @Update("update users_information set password=#{new_password}  where user_id=#{user_id} and password=#{password}")
     int update_password(String user_id, String password, String new_password);
+
+    @Update("update users_information set identity_type=#{identity_type},name=#{name},identity_id=#{identity_id}" +
+            "where user_id=#{user_id}")
+    int verify(String user_id, String name,String identity_type, String identity_id);
 }

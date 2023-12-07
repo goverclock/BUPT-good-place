@@ -20,4 +20,6 @@ public interface UserService {
     User get_user_information(String user_id);
 
     int update_password(String user_id, String password, String new_password);
+
+    int verify(String user_id, String name,String identity_type, String identity_id);
 }

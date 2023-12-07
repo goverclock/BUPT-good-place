@@ -1,7 +1,6 @@
 package org.example.service.impl;
 
 import org.example.map.UserMapper;
-import org.example.oss.OSS;
 import org.example.service.UserService;
 import org.example.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,5 +51,10 @@ public class UserImpl implements UserService {
     @Override
     public int update_password(String user_id, String password, String new_password) {
         return userMapper.update_password(user_id,password,new_password);
+    }
+
+    @Override
+    public int verify(String user_id, String name,String identity_type, String identity_id) {
+        return userMapper.verify(user_id,name,identity_type,identity_id);
     }
 }

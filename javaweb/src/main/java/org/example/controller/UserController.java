@@ -200,10 +200,7 @@ public class UserController {
             result.setMsg("用户不存在");
             return result.failed();
         }
-        System.out.println("--------"+files.length);
-        for(MultipartFile file:files){
-            System.out.println(file);
-        }
+
         String request_id = goodPlaceService.find_goodplace(user_id, type, topic_name, description, files, city, max_price, end_time);
         if (request_id != null) {
             GoodPlace goodPlace = goodPlaceService.query_by_request_id(request_id);
@@ -304,6 +301,7 @@ public class UserController {
     private Result response_update(String response_id,String description,List<MultipartFile>   files) throws Exception {
         Result result=new Result();
         Welcome welcome=welcomeService.query_by_response_id(response_id);
+        System.out.println("--------"+welcome.getState().equals("0"));
         if(welcome!=null && welcome.getState().equals("0")){
             int flag=welcomeService.response_update(response_id,description,files);
             if(flag>0){
@@ -316,7 +314,7 @@ public class UserController {
             }
         }
         else{
-            result.setMsg("响应已接受不能修改");
+            result.setMsg("响应已接受或已被拒绝不能修改");
             result.failed();
         }
 
@@ -370,9 +368,14 @@ public class UserController {
        if(welcome1!=null) {
            if (welcome1.getState().equals("0")) {
                int flag = welcomeService.response_delete(welcome.getResponse_id());
+               List<Welcome> welcomes=welcomeService.query_response_by_requestid(welcome1.getRequest_id());
+               if(welcomes.isEmpty()){
+                   goodPlaceService.update_state(welcome1.getRequest_id(),"0");
+               }
+
                result.success("成功删除");
            } else {
-               result.setMsg("响应已被接受无法删除");
+               result.setMsg("响应已被接受或已被拒绝无法删除");
                result.failed();
            }
        }
@@ -393,7 +396,7 @@ public class UserController {
             result.setMsg("该请求已完成");
             return result;
         }
-        welcomeService.update_state(welcome.getResponse_id());
+        welcomeService.update_state(welcome.getResponse_id(),"1");
         GoodPlace goodPlace=goodPlaceService.query_by_request_id(welcome1.getRequest_id());
         long cur_time= Instant.now().getEpochSecond();
         IncomeTable income=new IncomeTable(goodPlace.getRequest_id(),cur_time,goodPlace.getCity(),goodPlace.getType(),"1","2");
@@ -417,6 +420,40 @@ public class UserController {
         Result result=new Result();
         ArrayList<Statistics> statistics= adminService.query_profit_by_month(order.getStart_time(),order.getEnd_time());
         result.success(statistics);
+        return result;
+    }
+    @PostMapping("/reject_response")
+    @CrossOrigin(origins = "*")
+    private Result reject_response(@RequestBody Welcome welcome){
+        Result result=new Result();
+        Welcome welcome1=welcomeService.query_by_response_id(welcome.getResponse_id());
+        if(welcome1.getState().equals("0")){
+            welcomeService.update_state(welcome.getResponse_id(),"2");
+            result.success(null);
+        }
+        else if(welcome1.getState().equals("1")){
+            result.setMsg("该响应已被接受");
+            result.failed();
+        }
+        else {
+            result.setMsg("该响应已被拒绝");
+            result.failed();
+        }
+        return result;
+    }
+    @PostMapping("/verify")
+    @CrossOrigin(origins = "*")
+    private Result verify(@RequestBody User user){
+        Result result=new Result();
+        User user1=userService.select_by_id(user.getUser_id());
+        if(user1!=null){
+          int flag=userService.verify(user.getUser_id(),user.getName(),user.getIdentity_type(),user.getIdentity_id());
+            User user2=userService.select_by_id(user.getUser_id());
+          result.success(user2);
+          return result;
+        }
+        result.setMsg("用户不存在");
+        result.failed();
         return result;
     }
 
