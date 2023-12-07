@@ -81,6 +81,36 @@ public class Statistics {
 
 #### User接口：
 
+**新添加：上传用户身份信息：**
+
+Path:"/verify"
+
+{
+
+​	String user_id;
+
+​	String name;
+
+​	String identity_type;
+
+​	String identity_id;
+
+}
+
+return:
+
+{
+
+​	int code;
+
+​	String msg;
+
+​	User data;
+
+}
+
+
+
 ##### 新添加：获取用户信息：
 
 Path:"/get_user_information"
