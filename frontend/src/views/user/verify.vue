@@ -24,6 +24,7 @@
 
 <script setup>
 import { VerifyReq } from '@/request/api/user'
+import { GetUserInfoReq } from '@/request/api/user'
 
 const store = useStore()
 const userInfo = store.getters['user/userInfo'];
@@ -50,7 +51,7 @@ const rules = computed(() => {
             required: true,
             trigger: ["change", "blur"],
             validator: (rule, value, callback) => {
-                if (!/^\d{17}$/.test(value)) {
+                if (!/^\d{18}$/.test(value)) {
                     return callback(new Error("请输入有效的18位身份证号码"))
                 }
                 callback()
@@ -60,6 +61,10 @@ const rules = computed(() => {
 });
 
 const router = useRouter();
+const redirectReload = async (p) => {
+    await router.push({ path: p })
+    router.go()
+}
 function verifyComfirm() {
     let data = {
         user_id: userInfo.user_id,
@@ -72,7 +77,11 @@ function verifyComfirm() {
         if (!valid) return;
         VerifyReq(data).then(res => {
             ElMessage({ message: "认证成功!", type: "success" });
-            router.push("/home")
+            GetUserInfoReq(data)
+                .then((res) => {
+                    store.commit('user/setUserInfo', res.data)
+                    redirectReload('/home')
+                })
         })
     })
 }
@@ -83,11 +92,9 @@ function verifyComfirm() {
 .detail-page {
     background: #fff;
     height: 100%;
-    // padding-left: 3%;
 }
 
 .inline-item {
-    // display: inline-flex;
     width: 300px;
 }
 </style>
