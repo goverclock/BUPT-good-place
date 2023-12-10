@@ -7,11 +7,15 @@
     <el-pagination class="pagination" :total="totalItems" :page-size="pageSize"
         @current-change="handlePageChange"></el-pagination>
 
-    <div class="main-content">
-        <CardList :itemList="displayedItems"
-            @show="async (item) => { cardDetailVisible = true; cardDetail = { response: [] }; cardDetail = await getCardDetail(item); }">
-        </CardList>
-    </div>
+    <el-skeleton :rows="5" :loading="loading" animated style="padding-top: 20px;">
+        <template #default>
+            <div class="main-content">
+                <CardList :itemList="displayedItems"
+                    @show="async (item) => { cardDetailVisible = true; cardDetail = { response: [] }; cardDetail = await getCardDetail(item); }">
+                </CardList>
+            </div>
+        </template>
+    </el-skeleton>
 
     <WCMCardDetail v-model="cardDetailVisible" @off="cardDetailVisible = false" :detail="cardDetail"></WCMCardDetail>
 </template>
@@ -79,6 +83,7 @@ const displayedItems = computed(() => {
 });
 
 // requests
+const loading = ref(true)
 GetAllRequestsByCityReq({
     city: userInfo.register_city
 }).then(res => {
@@ -98,6 +103,7 @@ GetAllRequestsByCityReq({
         return b.data.create_time - a.data.create_time
     });
     totalItems.value = cardItems.value.length
+    loading.value = false
 })
 </script>
 

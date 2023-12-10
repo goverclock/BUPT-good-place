@@ -5,6 +5,7 @@
         <el-input v-model="searchText" placeholder="搜索去处" style="width: 40%;" clearable prefix-icon="search"></el-input>
         <div class="space"></div>
         <el-select v-model="selectedOption" placeholder="选择类型">
+            <el-option label="全部" value=""></el-option>
             <el-option label="钓鱼" value="钓鱼"></el-option>
             <el-option label="老少皆宜休闲" value="老少皆宜休闲"></el-option>
             <el-option label="农家院" value="农家院"></el-option>
@@ -17,12 +18,15 @@
     <el-pagination class="pagination" :total="filteredItemsLength" :page-size="pageSize"
         @current-change="(newPage) => { currentPage = newPage }"></el-pagination>
 
-    <div class="main-content">
-        <CardList :itemList="displayedItems"
-            @show="async (item) => { cardDetailVisible = true; cardDetail = { response: [] }; cardDetail = await getCardDetail(item); }">
-        </CardList>
-    </div>
-
+    <el-skeleton :rows="5" :loading="loading" animated style="padding-top: 20px;">
+        <template #default>
+            <div class="main-content">
+                <CardList :itemList="displayedItems"
+                    @show="async (item) => { cardDetailVisible = true; cardDetail = { response: [] }; cardDetail = await getCardDetail(item); }">
+                </CardList>
+            </div>
+        </template>
+    </el-skeleton>
     <PublishDialog v-model="publishDialogVisible" @off="publishDialogVisible = false"></PublishDialog>
     <WTGCardDetail v-model="cardDetailVisible" @off="cardDetailVisible = false" :detail="cardDetail"></WTGCardDetail>
 </template>
@@ -102,6 +106,7 @@ const displayedItems = computed(() => {
 });
 
 // requests
+const loading = ref(true)
 GetAllRequestsByUser({
     user_id: userInfo.user_id,
 }).then(res => {
@@ -120,6 +125,7 @@ GetAllRequestsByUser({
     cardItems.value.sort((a, b) => {
         return b.data.create_time - a.data.create_time
     });
+    loading.value = false
 })
 
 </script>
