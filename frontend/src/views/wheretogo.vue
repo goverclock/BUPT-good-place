@@ -2,10 +2,9 @@
     <div class="top">
         <el-button type="primary" icon="edit" @click="publishDialogVisible = true;">发布</el-button>
         <div class="space"></div>
-        <el-input v-model="searchText" placeholder="搜索去处" style="width: 40%;" clearable prefix-icon="search"
-            @change="handleSearch"></el-input>
+        <el-input v-model="searchText" placeholder="搜索去处" style="width: 40%;" clearable prefix-icon="search"></el-input>
         <div class="space"></div>
-        <el-select v-model="selectedOption" @change="handleSelectChange" placeholder="选择类型">
+        <el-select v-model="selectedOption" placeholder="选择类型">
             <el-option label="钓鱼" value="钓鱼"></el-option>
             <el-option label="老少皆宜休闲" value="老少皆宜休闲"></el-option>
             <el-option label="农家院" value="农家院"></el-option>
@@ -15,8 +14,8 @@
         </el-select>
     </div>
 
-    <el-pagination class="pagination" :total="totalItems" :page-size="pageSize"
-        @current-change="handlePageChange"></el-pagination>
+    <el-pagination class="pagination" :total="filteredItemsLength" :page-size="pageSize"
+        @current-change="(newPage) => { currentPage = newPage }"></el-pagination>
 
     <div class="main-content">
         <CardList :itemList="displayedItems"
@@ -29,7 +28,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { GetResponseByRequestId, GetAllRequestsByUser } from '@/request/api/wheretogo'
 import PublishDialog from '@/views/components/PublishDialog.vue'
 import WTGCardDetail from '@/views/components/WTGCardDetail.vue'
@@ -79,32 +78,35 @@ const getCardDetail = async (item) => {
     return detail
 }
 
-// TODO: search and filter
 const searchText = ref('');
 const selectedOption = ref('');
 
 // pagination
 const cardItems = ref([]);
-const totalItems = ref(cardItems.value.length);
-const pageSize = ref(4);
-const currentPage = ref(1);
-const handlePageChange = (newPage) => {
-    currentPage.value = newPage;
-};
+const filteredItems = ref([])
+const filteredItemsLength = computed(() => { return filteredItems.value.length })
+const pageSize = ref(4)
+const currentPage = ref(1)
 const displayedItems = computed(() => {
+    filteredItems.value = []
+    for (let i = 0; i < cardItems.value.length; i++) {
+        let name = cardItems.value[i].data.topic_name
+        let type = cardItems.value[i].data.type
+        if (name.includes(searchText.value) && type.includes(selectedOption.value)) {
+            filteredItems.value.push(cardItems.value[i])
+        }
+    }
     const start = (currentPage.value - 1) * pageSize.value;
     const end = start + pageSize.value;
-    return cardItems.value.slice(start, end);
+    return filteredItems.value.slice(start, end);
 });
 
 // requests
 GetAllRequestsByUser({
     user_id: userInfo.user_id,
 }).then(res => {
-    let ind = 1;
     for (const d of res.data) {
         let card = {
-            id: ind,
             title: d.topic_name || '暂无标题',
             content: d.description || '暂无描述',
             state: Number(d.state),
@@ -113,19 +115,12 @@ GetAllRequestsByUser({
         if (card.title.length > 20) {
             card.title = card.title.slice(0, 10) + "..."
         }
-        cardItems.value.push(card)  // TODO: sort
-        ind++;
+        cardItems.value.push(card)
     }
-    totalItems.value = cardItems.value.length
+    cardItems.value.sort((a, b) => {
+        return b.data.create_time - a.data.create_time
+    });
 })
-
-const handleSearch = () => {
-    console.log('Search text:', searchText.value);
-};
-
-const handleSelectChange = (value) => {
-    console.log('Selected category:', value);
-};
 
 </script>
 

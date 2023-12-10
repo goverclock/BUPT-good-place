@@ -78,14 +78,12 @@ const displayedItems = computed(() => {
     return cardItems.value.slice(start, end);
 });
 
-// request
+// requests
 GetAllRequestsByCityReq({
     city: userInfo.register_city
 }).then(res => {
-    let ind = 1;
     for (const d of res.data) {
         let card = {
-            id: ind,
             title: d.topic_name || '暂无标题',
             content: d.description || '暂无描述',
             state: Number(d.state),
@@ -95,8 +93,10 @@ GetAllRequestsByCityReq({
             card.title = card.title.slice(0, 10) + "..."
         }
         cardItems.value.push(card)
-        ind++;
     }
+    cardItems.value.sort((a, b) => {
+        return b.data.create_time - a.data.create_time
+    });
     totalItems.value = cardItems.value.length
 })
 </script>

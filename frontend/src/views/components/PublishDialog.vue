@@ -83,7 +83,7 @@ const form = reactive({
 })
 
 const disabledDate = (t) => {
-    // return t.getTime() < Date.now() // TODO: uncomment
+    return t.getTime() < Date.now()
 }
 const rules = computed(() => {
     return {
