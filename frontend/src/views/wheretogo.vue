@@ -148,7 +148,6 @@ GetAllRequestsByUser({
     text-align: center;
 }
 
-
 .space {
     margin-right: 10px;
 }
