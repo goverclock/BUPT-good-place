@@ -145,7 +145,6 @@ function handleAddrChange(e) {
     let addrText = addrNode.pathLabels.join("-")
     form.city = addrText
 }
-const fileList = ref([])
 const formRef = ref();
 const form = reactive({
     topic_name: '',
@@ -175,7 +174,7 @@ const rules = computed(() => {
     }
 });
 
-// TODO: handle file update
+const fileList = []
 const beginEditing = () => {
     editing.value = true
     form.topic_name = props.detail.topic_name
@@ -185,22 +184,21 @@ const beginEditing = () => {
     // form.city = props.detail.city    // TODO: not working
     form.end_time = props.detail.end_time
 
-    for (let index = 1; index <= props.detail.files.length; index++) {
-        const u = props.detail.files[index];
-        const n = "附件" + index
-        fileList.value.push({
-            name: n,
-            url: u,
-        })
-    }
+    // TODO: handle file update when there are already some files
+    // for (let index = 1; index <= props.detail.files.length; index++) {
+    //     const u = props.detail.files[index];
+    //     const n = "附件" + index
+    //     fileList.push({
+    //         name: n,
+    //         url: u,
+    //     })
+    // }
 }
 
 const confirmEdit = () => {
-    const fileList = []
     formRef.value.validate((valid) => {
         if (!valid) return;
 
-        editing.value = false
         let data = {
             request_id: props.detail.request_id,
             type: form.type,
@@ -222,7 +220,9 @@ const confirmEdit = () => {
         UpdateRequestReq(fd)
             .then(res => {
                 ElMessage({ message: "已更新请求!", type: "success" });
+                editing.value = false
                 emit('off')
+                setTimeout(() => { location.reload() }, 1000)
             })
     })
 }

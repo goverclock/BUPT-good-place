@@ -10,7 +10,7 @@
       <br>
       <div style="padding-left: 35%; transform: scale(1.5);">
         <!-- TODO: handle click -->
-        <el-button type="primary" :icon="Edit" round>立即发布</el-button>
+        <el-button type="primary" :icon="Edit" round @click="gotoPath('wheretogo')">立即发布</el-button>
       </div>
     </div>
 
@@ -41,6 +41,7 @@
 <script setup>
 import { ref } from 'vue';
 import { Edit } from '@element-plus/icons-vue'
+import { useRouter } from 'vue-router';
 
 const store = useStore()
 const userInfo = store.getters['user/userInfo']
@@ -50,6 +51,12 @@ const carouselItems = ref([
   { src: 'src/assets/home_carousel/1.jpeg' },
   { src: 'src/assets/home_carousel/2.png' },
 ]);
+
+const router = useRouter()
+function gotoPath(path) {
+  router.push(path)
+}
+
 </script>
 
 <style>
