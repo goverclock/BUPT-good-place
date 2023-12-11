@@ -58,7 +58,11 @@
         <template #footer>
             <div v-if="hasMyResponse && !editing">
                 <el-button type="primary" plain @click="editing = true" :disabled="!canModDelResponse()">修改我的响应</el-button>
-                <el-button type="danger" plain @click="deleteResponse" :disabled="!canModDelResponse()">删除我的响应</el-button>
+                <el-popconfirm title="确定要删除响应吗?" @confirm="deleteResponse">
+                    <template #reference>
+                        <el-button type="danger" plain :disabled="!canModDelResponse()">删除我的响应</el-button>
+                    </template>
+                </el-popconfirm>
             </div>
             <span v-else-if="!editing" class="dialog-footer">
                 <el-button type="primary" plain :disabled="(() => { return props.detail.user_id == userInfo.user_id })()"

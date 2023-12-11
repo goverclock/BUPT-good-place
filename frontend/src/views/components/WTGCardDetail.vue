@@ -75,8 +75,8 @@
 
                 <div v-if="[0, 1].includes(props.detail.state)"> <!-- 请求还没有响应,或有响应但未接受 -->
                     <div v-if="resp.state == '0'"> <!-- 尚未被接受或拒绝的响应 -->
-                        <el-button type="success" plain @click="acceptResp(resp.response_id)">接受</el-button>
-                        <el-button type="danger" plain @click="rejectResp(resp.response_id)">拒绝</el-button>
+                        <el-button type="success" plain @click="acceptResp(resp)">接受</el-button>
+                        <el-button type="danger" plain @click="rejectResp(resp)">拒绝</el-button>
                     </div>
                 </div>
             </el-collapse-item>
@@ -85,8 +85,11 @@
         <template #footer>
             <span v-if="!editing" class="dialog-footer">
                 <el-button type="primary" plain :disabled="hasResponse" @click="beginEditing">修改请求</el-button>
-                <el-button type="danger" plain :disabled="hasResponse"
-                    @click="handleDelete(props.detail.request_id)">删除请求</el-button>
+                <el-popconfirm title="确定要删除请求吗?" @confirm="handleDelete(props.detail.request_id)">
+                    <template #reference>
+                        <el-button type="danger" plain :disabled="hasResponse">删除请求</el-button>
+                    </template>
+                </el-popconfirm>
             </span>
             <span v-else class="dialog-footer">
                 <el-button type="success" plain @click="confirmEdit">完成</el-button>
@@ -227,7 +230,8 @@ const confirmEdit = () => {
     })
 }
 
-const acceptResp = (response_id) => {
+const acceptResp = (resp) => {
+    const response_id = resp.response_id
     AcceptResponseReq({
         response_id: response_id
     }).then(res => {
@@ -237,11 +241,13 @@ const acceptResp = (response_id) => {
     })
 }
 
-const rejectResp = (response_id) => {
+const rejectResp = (resp) => {
+    const response_id = resp.response_id
     RejectResponseReq({
         response_id: response_id
     }).then(res => {
-        ElMessage("已拒绝响应!");
+        ElMessage({ message: "已拒绝响应!", type: "success" });
+        resp.state = '2'
     })
 }
 
