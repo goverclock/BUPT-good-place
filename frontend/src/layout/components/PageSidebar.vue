@@ -18,7 +18,7 @@
                 </el-icon>
                 <span>我要响应</span>
             </el-menu-item>
-            <el-menu-item index="/stat">
+            <el-menu-item v-if="userInfo.user_id == 'admin'" index="/stat">
                 <el-icon>
                     <document />
                 </el-icon>
@@ -41,6 +41,11 @@ import {
     Location,
     Setting,
 } from '@element-plus/icons-vue'
+
+const store = useStore()
+const userInfo = store.getters['user/userInfo'];
+userInfo?.user_id || location.reload();
+
 const handleOpen = (key: string, keyPath: string[]) => {
     // console.log(key, keyPath)
 }

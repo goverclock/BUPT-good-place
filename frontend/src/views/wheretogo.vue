@@ -25,6 +25,7 @@
                     @show="async (item) => { cardDetailVisible = true; cardDetail = { response: [] }; cardDetail = await getCardDetail(item); }">
                 </CardList>
             </div>
+            <el-empty v-if="displayedItems.length == 0" description="还没有发布请求" />
         </template>
     </el-skeleton>
     <PublishDialog v-model="publishDialogVisible" @off="publishDialogVisible = false"></PublishDialog>

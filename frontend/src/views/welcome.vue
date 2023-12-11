@@ -1,7 +1,12 @@
 <template>
-    <el-row class="top">
+    <el-row v-if="userInfo.user_id != 'admin'" class="top">
         <el-text size="large">为您展示</el-text>
         <el-text size="large" tag="b">{{ userInfo.register_city }}</el-text>
+        <el-text size="large">的请求</el-text>
+    </el-row>
+    <el-row v-else>
+        <el-text size="large">为您展示</el-text>
+        <el-text size="large" tag="b">所有地区</el-text>
         <el-text size="large">的请求</el-text>
     </el-row>
     <el-pagination class="pagination" :total="totalItems" :page-size="pageSize"
@@ -14,6 +19,7 @@
                     @show="async (item) => { cardDetailVisible = true; cardDetail = { response: [] }; cardDetail = await getCardDetail(item); }">
                 </CardList>
             </div>
+            <el-empty v-if="displayedItems.length == 0" description="本地还没有请求" />
         </template>
     </el-skeleton>
 
@@ -85,7 +91,7 @@ const displayedItems = computed(() => {
 // requests
 const loading = ref(true)
 GetAllRequestsByCityReq({
-    city: userInfo.register_city
+    city: userInfo.register_city || ''
 }).then(res => {
     for (const d of res.data) {
         let card = {

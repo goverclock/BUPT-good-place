@@ -56,6 +56,7 @@ function handleAddrChange(e) {
         let addrText = addrNode.pathLabels.join("-")
         form.city = addrText
 }
+
 const rules = computed(() => {
         return {
                 account: [
