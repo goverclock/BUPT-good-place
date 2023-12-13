@@ -10,13 +10,14 @@
                     @change="handleAddrChange"></el-cascader>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="searchConfirm">
+                <el-button type="primary" @click="handleSearch">
                     查询
                 </el-button>
             </el-form-item>
         </el-form>
     </div>
 
+    <LineChart v-if="chartVisible"></LineChart>
     <el-skeleton :rows="5" :loading="loading" animated style="padding-top: 20px;">
         <template #default>
             <div class="main-content">
@@ -28,7 +29,9 @@
 
 <script setup>
 import cityData from '@/assets/pca-code.json'
-import { QueryProfitReq, QueryProfitMonthReq } from '@/request/api/stat'
+import { MockQueryProfitReq, QueryProfitReq, QueryProfitMonthReq } from '@/request/api/stat'
+// import LineChart from '@/views/components/LineChart.vue'
+import LineChart from '@/views/components/LineChart.vue'
 
 const store = useStore()
 const userInfo = store.getters['user/userInfo'];
@@ -64,42 +67,6 @@ const rules = computed(() => {
         },
     }
 });
-
-const categories = [
-    "钓鱼",
-    "老少皆宜休闲",
-    "农家院",
-    "温泉度假",
-    "僻静休闲",
-    "游乐场",
-]
-const searchResult = ref([])
-function searchConfirm() {
-    formRef.value.validate((valid) => {
-        if (!valid) return
-
-        let data = {
-            start_time: Date.parse(form.start_end[0]) / 1000,
-            end_time: Date.parse(form.start_end[1]) / 1000,
-            city: form.city,
-            type: ''
-        }
-
-        let result = []
-        loading.value = true
-        categories.forEach((cate) => {
-            data.type = cate
-            QueryProfitReq(data).then(res => {
-                // just show result, do not prompt any message
-                result.push({ t: cate, r: res.data })
-            })
-        })
-        setTimeout(() => {
-            console.log(result)
-            loading.value = false
-        }, 1000)
-    })
-}
 
 // city picker
 let city = {
@@ -155,6 +122,53 @@ const shortcuts = [
 ]
 const disabledDate = (t) => {
     return t.getTime() > Date.now()
+}
+
+// chart
+const chartVisible = ref(false)
+
+// requests
+const categories = [
+    "钓鱼",
+    "老少皆宜休闲",
+    "农家院",
+    "温泉度假",
+    "僻静休闲",
+    "游乐场",
+]
+const searchResult = ref([])
+function handleSearch() {
+    formRef.value.validate((valid) => {
+        if (!valid) return
+        loading.value = true
+        chartVisible.value = false
+
+        let data = {
+            start_time: Date.parse(form.start_end[0]) / 1000,
+            end_time: Date.parse(form.start_end[1]) / 1000,
+            city: form.city,
+            type: ''
+        }
+        async function fetchAllCategoriesData() {
+            const result = []
+            const promises = categories.map(async (cate) => {
+                data.type = cate;
+                try {
+                    const res = await MockQueryProfitReq(data);
+                    result.push({ t: cate, r: res.data })
+                } catch (e) {
+                    console.error(e)
+                }
+            })
+            await Promise.all(promises)
+
+            console.log(result)
+            loading.value = false
+            chartVisible.value = true
+        }
+
+        fetchAllCategoriesData()
+    })
 }
 
 </script>

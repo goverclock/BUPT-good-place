@@ -8,6 +8,16 @@ export function QueryProfitReq(d) {
     });
 }
 
+export function MockQueryProfitReq(d) {
+    console.log('MockQueryProfitReq: got ', d)
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            const rn = Math.floor(Math.random() * 100);
+            resolve({ data: [rn, rn * 2]});
+        }, 1000)
+    })
+}
+
 export function QueryProfitMonthReq(d) {
     return request({
         url: 'query_profit_by_month',
