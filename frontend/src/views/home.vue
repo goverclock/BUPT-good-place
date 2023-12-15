@@ -9,7 +9,6 @@
       <br>
       <br>
       <div style="padding-left: 35%; transform: scale(1.5);">
-        <!-- TODO: handle click -->
         <el-button type="primary" :icon="Edit" round @click="gotoPath('wheretogo')">立即发布</el-button>
       </div>
     </div>
@@ -27,12 +26,15 @@
   <!-- TODO -->
   <el-row :gutter="20">
     <el-col :span="8">
+      <el-icon color="#409EFC" style="font-size: 70px;"><Reading /></el-icon>
       <h3>如何使用</h3>
     </el-col>
     <el-col :span="8">
+      <el-icon color="#409EFC" style="font-size: 70px;"><Document /></el-icon>
       <h3>新闻公告</h3>
     </el-col>
     <el-col :span="8">
+      <el-icon color="#409EFC" style="font-size: 70px;"><Place /></el-icon>
       <h3>随机推荐</h3>
     </el-col>
   </el-row>

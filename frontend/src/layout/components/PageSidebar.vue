@@ -1,7 +1,6 @@
 <template>
     <el-col :span="24">
-        <el-menu router active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo"
-            default-active="2" text-color="#fff" @open="handleOpen" @close="handleClose">
+        <el-menu router @open="handleOpen" @close="handleClose">
             <el-menu-item index="/home">
                 <el-icon><home-filled /></el-icon>
                 <span>主页</span>

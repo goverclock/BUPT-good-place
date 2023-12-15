@@ -96,7 +96,6 @@ if (isLogin) {
     >.left {
       height: 100%;
       width: 13%;
-      background-color: #545c64;
       color: #fff;
     }
 
