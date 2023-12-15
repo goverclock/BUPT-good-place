@@ -9,9 +9,10 @@
                 <el-icon>
                     <location />
                 </el-icon>
-                <span>我发布的</span>
+                <span v-if="userInfo.user_id != 'admin'">我发布的</span>
+                <span v-else>所有请求</span>
             </el-menu-item>
-            <el-menu-item index="/welcome">
+            <el-menu-item v-if="userInfo.user_id != 'admin'" index="/welcome">
                 <el-icon>
                     <document-checked />
                 </el-icon>

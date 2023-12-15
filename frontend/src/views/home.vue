@@ -53,12 +53,6 @@
         根据国家相关法律规定，为保障您的账户安全和提供更加个性化的服务，我们需要您进一步完善个人基本信息。这些信息将被用作您的账户认证信息，以确保您在平台上的身份真实可靠。
       </el-text>
     </el-col>
-    <!-- <el-col :span="6">
-      <el-icon color="#409EFC" style="font-size: 70px;">
-        <Place />
-      </el-icon>
-      <h3>随机推荐</h3>
-    </el-col> -->
     <el-col :span="7">
       <el-icon color="#409EFC" style="font-size: 70px;">
         <DataLine />

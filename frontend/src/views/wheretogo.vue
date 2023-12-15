@@ -1,6 +1,6 @@
 <template>
     <div class="top">
-        <el-button type="primary" icon="edit" @click="publishDialogVisible = true;">发布</el-button>
+        <el-button v-if="userInfo.user_id != 'admin'" type="primary" icon="edit" @click="publishDialogVisible = true;">发布</el-button>
         <div class="space"></div>
         <el-input v-model="searchText" placeholder="搜索去处" style="width: 40%;" clearable prefix-icon="search"></el-input>
         <div class="space"></div>
