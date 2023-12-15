@@ -7,6 +7,11 @@
       <div v-if="showLeft" class="left">
         <PageSidebar></PageSidebar>
       </div>
+
+      <!-- <div v-if="showHeadPic">
+        <img src="@/assets/head_bg.jpg" style="max-height: 300px;">
+      </div>
+      <br> -->
       <div :class="{ 'right': showLeft, 'right-no-padding': !showLeft }">
         <router-view></router-view>
       </div>
@@ -22,6 +27,10 @@ const route = useRoute();
 const showLeft = computed(() => {
   const routeName = route.name;
   return !['Login', 'Register', 'NotFound'].includes(routeName);
+})
+const showHeadPic = computed(() => {
+  const routeName = route.name;
+  return routeName == 'Home'
 })
 
 const store = useStore();

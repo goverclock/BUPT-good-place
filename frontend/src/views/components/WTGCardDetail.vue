@@ -186,16 +186,6 @@ const beginEditing = () => {
     form.max_price = Number(props.detail.max_price)
     // form.city = props.detail.city    // TODO: not working
     form.end_time = props.detail.end_time
-
-    // TODO: handle file update when there are already some files
-    // for (let index = 1; index <= props.detail.files.length; index++) {
-    //     const u = props.detail.files[index];
-    //     const n = "附件" + index
-    //     fileList.push({
-    //         name: n,
-    //         url: u,
-    //     })
-    // }
 }
 
 const confirmEdit = () => {
