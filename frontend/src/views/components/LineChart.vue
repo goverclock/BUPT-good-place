@@ -4,7 +4,6 @@
 
 <script setup>
 const props = defineProps(['monthData'])
-console.log(props.monthData)
 const options = ref({
     theme: "light2",
     exportEnabled: true,
@@ -12,7 +11,7 @@ const options = ref({
         text: "月度成交数/中介费"
     },
     axisY: {
-        title: ["成交数", "中介费"]
+        title: "成交数/中介费"
     },
     toolTip: {
         shared: true

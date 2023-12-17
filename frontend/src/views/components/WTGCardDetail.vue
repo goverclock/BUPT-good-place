@@ -1,7 +1,14 @@
 <template>
     <el-dialog v-model="visible" title="寻去处详情">
         <!-- request detail -->
+        <ProfileDialog v-model="showUserProfile" :profile="showingUser" @off="showUserProfile = false">
+        </ProfileDialog>
         <el-descriptions v-if="!editing" :title="props.detail.topic_name" :column="1">
+            <el-descriptions-item v-if="userInfo.user_id == 'admin'" label="发布者">
+                <el-link type="info" @click="showUserProfile = true; showingUser = props.detail.user_id">
+                    {{ props.detail.user_id }}
+                </el-link>
+            </el-descriptions-item>
             <el-descriptions-item label="类型">{{ props.detail.type }}</el-descriptions-item>
             <el-descriptions-item label="地区">{{ props.detail.city }}</el-descriptions-item>
             <el-descriptions-item label="最高单价">{{ props.detail.max_price }} 元</el-descriptions-item>
@@ -56,6 +63,7 @@
 
         <!-- responses -->
         <el-collapse v-if="!editing" v-model="showingResponse">
+            <!-- response user's profile -->
             <el-collapse-item v-for="resp in props.detail.response" :name="resp.user_id">
                 <template #title>
                     来自用户 {{ resp.user_id }} 的响应<el-tag v-if="resp.user_id == userInfo.user_id">我的响应</el-tag>
@@ -63,6 +71,10 @@
                     <el-tag v-else-if="resp.state == '2'" type="danger">已拒绝</el-tag>
                 </template>
                 <el-descriptions :column="1">
+                    <el-descriptions-item v-if="userInfo.user_id == 'admin'" label="响应者">
+                        <el-link type="info" @click="showUserProfile = true; showingUser = resp.user_id">{{ resp.user_id
+                        }}</el-link>
+                    </el-descriptions-item>
                     <el-descriptions-item label="响应描述">{{ resp.description }}</el-descriptions-item>
                     <el-descriptions-item label="附件">
                         <ul>
@@ -102,6 +114,7 @@
 <script setup>
 import { DeleteRequestReq, UpdateRequestReq, AcceptResponseReq, RejectResponseReq } from '@/request/api/wheretogo'
 import { ElMessage } from 'element-plus';
+import ProfileDialog from '@/views/components/ProfileDialog.vue'
 import cityData from '@/assets/pca-code.json'
 
 const props = defineProps(['detail'])
@@ -242,5 +255,10 @@ const rejectResp = (resp) => {
 }
 
 const showingResponse = ref("")
+
+// user info dialog
+const userDetail = ref({})
+const showUserProfile = ref(false)
+const showingUser = ref('')
 
 </script>
