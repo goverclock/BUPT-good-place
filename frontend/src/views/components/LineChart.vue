@@ -1,46 +1,49 @@
 <template>
-    <CanvasJSChart :options="options" :style="styleOptions" @chart-ref="chartInstance" />
+    <CanvasJSChart :options="options" :monthData="props.monthData" style="width: 1000px; height: 80%;" @chart-ref="chartInstance" />
 </template>
 
 <script setup>
-const chart = ref()
-
+const props = defineProps(['monthData'])
+console.log(props.monthData)
 const options = ref({
-    animationEnabled: true,
-    exportEnabled: true,
     theme: "light2",
+    exportEnabled: true,
     title: {
-        text: "UPI Transactions in India"
-    },
-    axisX: {
-        valueFormatString: "YYYY",
-        labelTextAlign: "center",
-        labelAngle: 0
+        text: "月度成交数/中介费"
     },
     axisY: {
-        title: "Amount (in ₹ Crore)",
-        valueFormatString: "₹##,##,##0cr"
+        title: ["成交数", "中介费"]
+    },
+    toolTip: {
+        shared: true
+    },
+    legend: {
+        cursor: "pointer",
+        itemclick: function (e) {
+            if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+            } else {
+                e.dataSeries.visible = true;
+            }
+            e.chart.render();
+        }
     },
     data: [{
-        type: "line",
-        yValueFormatString: "₹##,##,##0.## crores",
-        dataPoints: [
-            { label: "2016", y: 893.07 },
-            { label: "2017", y: 57020.87 },
-            { label: "2018", y: 585710.45 },
-            { label: "2019", y: 1836638.18 },
-            { label: "2020", y: 3387744.72 },
-            { label: "2021", y: 7159285.80 },
-            { label: "2022 (Jan-Oct)", y: 10122170.33 }
-        ]
+        type: "spline",
+        name: "成交数",
+        showInLegend: true,
+        color: "#012066",
+        dataPoints: props.monthData[0]
+    }, {
+        type: "spline",
+        name: "中介费",
+        showInLegend: true,
+        color: "#F7C705",
+        dataPoints: props.monthData[1]
     }]
 })
 
-const styleOptions = ref({
-    width: "100%",
-    height: "360px"
-})
-
+const chart = ref()
 function chartInstance(chart) {
     chart.value = chart;
 }

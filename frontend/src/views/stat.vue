@@ -17,20 +17,26 @@
         </el-form>
     </div>
 
-    <LineChart v-if="chartVisible"></LineChart>
     <el-skeleton :rows="5" :loading="loading" animated style="padding-top: 20px;">
         <template #default>
             <div class="main-content">
-                TODO: statistics page
+                <el-table v-if="tableVisible" :data="tableData">
+                    <el-table-column prop="date" label="日期" width="240" />
+                    <el-table-column prop="city" label="地区" width="250" />
+                    <el-table-column prop="type" label="类型" width="180" />
+                    <el-table-column prop="count" label="交易数" width="160" />
+                    <el-table-column prop="profit" label="中介费" width="160" />
+                </el-table>
+                <LineChart v-if="chartVisible" :monthData="chartData"></LineChart>
             </div>
+            <el-empty v-if="!loading && !chartVisible" description="点击查询获取统计数据" />
         </template>
     </el-skeleton>
 </template>
 
 <script setup>
 import cityData from '@/assets/pca-code.json'
-import { MockQueryProfitReq, QueryProfitReq, QueryProfitMonthReq } from '@/request/api/stat'
-// import LineChart from '@/views/components/LineChart.vue'
+import { MockQueryProfitReq, MockQueryProfitMonthReq, QueryProfitReq, QueryProfitMonthReq } from '@/request/api/stat'
 import LineChart from '@/views/components/LineChart.vue'
 
 const store = useStore()
@@ -42,12 +48,12 @@ if (userInfo.user_id != "admin") {
     router.push("/home")
 }
 
-const loading = ref(true)
+const loading = ref(false)
 
 // form
 const formRef = ref();
 const end = new Date()
-const start = new Date()
+const start = new Date()    // current time
 start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
 const form = reactive({
     start_end: [start, end],  // default to last 3 month
@@ -125,7 +131,10 @@ const disabledDate = (t) => {
 }
 
 // chart
+const tableVisible = ref(false)
 const chartVisible = ref(false)
+const tableData = ref([])
+const chartData = ref([])
 
 // requests
 const categories = [
@@ -142,6 +151,7 @@ function handleSearch() {
         if (!valid) return
         loading.value = true
         chartVisible.value = false
+        tableVisible.value = false
 
         let data = {
             start_time: Date.parse(form.start_end[0]) / 1000,
@@ -149,25 +159,81 @@ function handleSearch() {
             city: form.city,
             type: ''
         }
-        async function fetchAllCategoriesData() {
-            const result = []
-            const promises = categories.map(async (cate) => {
+        async function fetchChartData() {
+            // for table
+            const categoryResult = []
+            let promises = categories.map(async (cate) => {
                 data.type = cate;
                 try {
                     const res = await MockQueryProfitReq(data);
-                    result.push({ t: cate, r: res.data })
+                    categoryResult.push({ type: cate, count: res.data[0], profit: res.data[1] })
                 } catch (e) {
                     console.error(e)
                 }
             })
             await Promise.all(promises)
 
-            console.log(result)
+            // for line chart
+            const monthResult = []
+            const months = []
+            const startDate = new Date(data.start_time * 1000)
+            startDate.setMonth(startDate.getMonth() + 1)
+            const endDate = new Date(data.end_time * 1000)
+            endDate.setMonth(endDate.getMonth() + 1)
+            let curDate = new Date(startDate)
+            while (curDate < endDate) {
+                months.push(curDate.getTime() / 1000)
+                curDate.setMonth(curDate.getMonth() + 1)
+            }
+            promises = months.map(async (m) => {
+                const st = m
+                let et = new Date(st * 1000)
+                et.setMonth(et.getMonth() + 1)
+                et = et.getTime() / 1000
+                try {
+                    const res = await MockQueryProfitMonthReq({ start_time: st, end_time: et });
+                    monthResult.push(res)
+                } catch (e) {
+                    console.error(e)
+                }
+            })
+            await Promise.all(promises)
+
+            // resolve result as table data and chart data
+            tableData.value = []
+            categoryResult.forEach((cr) => {
+                let bg_date = new Date(data.start_time * 1000)
+                let ed_date = new Date(data.end_time * 1000)
+                tableData.value.push({
+                    date: bg_date.toLocaleDateString() + '-' + ed_date.toLocaleDateString(),
+                    city: data.city,
+                    type: cr.type,
+                    count: cr.count,
+                    profit: cr.profit
+                })
+            })
+
+            chartData.value = []
+            let cd1 = []    // 成交数
+            let cd2 = []    // 中介费
+            monthResult.forEach((mr) => {
+                cd1.push({
+                    label: mr.date,
+                    y: mr.count,
+                })
+                cd2.push({
+                    label: mr.date,
+                    y: mr.agency_fee,
+                })
+            })
+            chartData.value.push(cd1)
+            chartData.value.push(cd2)
+
             loading.value = false
             chartVisible.value = true
+            tableVisible.value = true
         }
-
-        fetchAllCategoriesData()
+        fetchChartData()
     })
 }
 
