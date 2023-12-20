@@ -165,7 +165,7 @@ function handleSearch() {
             let promises = categories.map(async (cate) => {
                 data.type = cate;
                 try {
-                    const res = await MockQueryProfitReq(data);
+                    const res = await QueryProfitReq(data);
                     categoryResult.push({ type: cate, count: res.data[0], profit: res.data[1] })
                 } catch (e) {
                     console.error(e)
@@ -191,7 +191,7 @@ function handleSearch() {
                 et.setMonth(et.getMonth() + 1)
                 et = et.getTime() / 1000
                 try {
-                    const res = await MockQueryProfitMonthReq({ start_time: st, end_time: et });
+                    const res = await QueryProfitMonthReq({ start_time: st, end_time: et });
                     monthResult.push(res)
                 } catch (e) {
                     console.error(e)
