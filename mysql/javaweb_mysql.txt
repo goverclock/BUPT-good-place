@@ -1,0 +1,57 @@
+create table users_information (
+	user_id  varchar(128),
+	user_name  varchar(128),
+	password  varchar(128),
+	user_type  varchar(64),
+	name  varchar(64),
+	identity_type varchar(128),
+	identity_id  varchar(128),
+	phone_num  varchar(128),
+	user_rank  varchar(64),
+	description  varchar(256),
+	register_city varchar(128),
+	register_time varchar(128),
+	modify_time varchar(128),
+	primary  key (user_id)
+);
+
+create table goodplaces(
+	request_id varchar(128),
+	user_id varchar(128),
+	city varchar(128),
+	type varchar(128),
+	topic_name varchar(128),
+	description varchar(256),
+	file_dir varchar(256),
+	max_price varchar(128),
+	end_time BIGINT,
+	create_time BIGINT,
+	change_time varchar(128),
+	state varchar(10),
+	primary  key (request_id )
+
+);
+
+create table welcome(
+
+	response_id varchar(128) ,
+	user_id varchar(128),
+	request_id varchar(128) ,
+	description varchar(256) ,
+	file_dir varchar(256) ,
+	create_time BIGINT ,
+	change_time varchar(128) ,
+	state varchar(10) ,
+	primary  key (response_id )
+);
+create table incometable(
+	request_id   varchar(128)  binary,
+	date  BIGINT,
+	city varchar(128),
+	type varchar(128),
+	count varchar(128),
+	income varchar(128),
+	primary  key (request_id)
+);
+
+

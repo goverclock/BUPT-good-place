@@ -1,0 +1,5 @@
+user_id,user_name,password,user_type,name,identity_type,identity_id,phone_num,user_rank,description,register_city,register_time,modify_time
+admin,,admin,,xiaohong,身份证,1654,,,,,"2023-12-07 13:03:51",
+User01,User01,User01,user,xiaohong,身份证,123456733333333333,11111111111,normal,无,北京市-市辖区-东城区,"2023-12-20 18:45:59",
+User02,User02,User02,user,xiaoming,身份证,111111111111111111,12345678900,normal,。。。。,北京市-市辖区-东城区,"2023-12-20 18:50:29",
+User03,User03,User03,user,xsssssss,护照,122111111111111111,11111111111,normal,wu,北京市-市辖区-东城区,"2023-12-20 18:54:40",

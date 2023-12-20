@@ -207,4 +207,9 @@ public class GoodPlaceImpl implements GoodPlaceService {
             }
         }
     }
+
+    @Override
+    public List<GoodPlace> query_all_request() {
+        return goodPlaceMapper.query_all_request() ;
+    }
 }

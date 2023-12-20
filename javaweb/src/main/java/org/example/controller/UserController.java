@@ -234,6 +234,16 @@ public class UserController {
     public Result query_request_by_city(@RequestBody GoodPlace goodPlace ) throws Exception {
         Result result = new Result();
         state_update();
+        if(goodPlace.getCity().equals("")){
+            List<GoodPlace> goodPlaces=goodPlaceService.query_all_request();
+            ArrayList<GoodPlace_Tmp> goodPlaceTmps=new ArrayList<>();
+            for(GoodPlace goodPlace1:goodPlaces){
+                GoodPlace_Tmp tmp=new GoodPlace_Tmp(goodPlace1);
+                goodPlaceTmps.add(tmp);
+            }
+            result.success(goodPlaceTmps);
+            return result;
+        }
         List<GoodPlace> goodPlaces = goodPlaceService.query_bycity(goodPlace.getCity());
         ArrayList<GoodPlace_Tmp> goodPlaceTmps=new ArrayList<>();
         for(GoodPlace goodPlace1:goodPlaces){
@@ -325,7 +335,13 @@ public class UserController {
     private Result query_request_by_user_id(@RequestBody User user) throws Exception {
         Result result=new Result();
         state_update();
-        List<GoodPlace> goodPlaces=goodPlaceService.query_request_by_user_id(user.getUser_id());
+        List<GoodPlace> goodPlaces;
+        if(user.getUser_id().equals("admin")){
+            goodPlaces=goodPlaceService.query_all_request();
+        }
+        else {
+            goodPlaces = goodPlaceService.query_request_by_user_id(user.getUser_id());
+        }
         ArrayList<GoodPlace_Tmp> goodPlaceTmps=new ArrayList<>();
         for(GoodPlace goodPlace1:goodPlaces){
             GoodPlace_Tmp tmp=new GoodPlace_Tmp(goodPlace1);
@@ -418,7 +434,7 @@ public class UserController {
     @CrossOrigin(origins = "*")
     private Result query_profit_by_month(@RequestBody Order order) throws ParseException {
         Result result=new Result();
-        ArrayList<Statistics> statistics= adminService.query_profit_by_month(order.getStart_time(),order.getEnd_time());
+        Statistics statistics= adminService.query_profit_by_month(order.getStart_time(),order.getEnd_time());
         result.success(statistics);
         return result;
     }

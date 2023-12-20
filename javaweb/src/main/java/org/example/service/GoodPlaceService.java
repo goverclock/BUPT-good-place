@@ -25,4 +25,6 @@ public interface GoodPlaceService {
     int update_state(String request_id,String state);
 
    void end_time_check();
+
+    List<GoodPlace> query_all_request();
 }

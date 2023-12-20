@@ -12,5 +12,5 @@ public interface AdminService {
 
     ArrayList<String> query_profit(Order order);
 
-    ArrayList<Statistics> query_profit_by_month(long start_time, long end_time) throws ParseException;
+    Statistics query_profit_by_month(long start_time, long end_time) throws ParseException;
 }

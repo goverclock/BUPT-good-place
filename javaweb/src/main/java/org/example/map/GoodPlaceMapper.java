@@ -53,4 +53,7 @@ public interface GoodPlaceMapper {
 
     @Update("update goodplaces set state=#{state} where request_id=#{request_id}")
     int update_state(String request_id, String state);
+
+    @Select("select * from goodplaces")
+    List<GoodPlace> query_all_request();
 }
