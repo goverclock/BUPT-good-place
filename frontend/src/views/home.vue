@@ -27,7 +27,6 @@
   <br>
   <br>
   <br>
-  <!-- TODO -->
   <HomeDialog v-model="homeDialogVisible" @off="homeDialogVisible = false" :content="showingItem.content"
     :title="showingItem.title"></HomeDialog>
   <el-row :gutter="70">

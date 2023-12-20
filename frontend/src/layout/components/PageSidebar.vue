@@ -1,6 +1,6 @@
 <template>
     <el-col :span="24">
-        <el-menu router @open="handleOpen" @close="handleClose">
+        <el-menu router>
             <el-menu-item index="/home">
                 <el-icon><home-filled /></el-icon>
                 <span>主页</span>
@@ -46,11 +46,5 @@ const store = useStore()
 const userInfo = store.getters['user/userInfo'];
 userInfo?.user_id || location.reload();
 
-const handleOpen = (key: string, keyPath: string[]) => {
-    // console.log(key, keyPath)
-}
-const handleClose = (key: string, keyPath: string[]) => {
-    // console.log(key, keyPath)
-}
 </script>
   

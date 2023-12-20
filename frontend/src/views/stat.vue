@@ -36,7 +36,7 @@
 
 <script setup>
 import cityData from '@/assets/pca-code.json'
-import { MockQueryProfitReq, MockQueryProfitMonthReq, QueryProfitReq, QueryProfitMonthReq } from '@/request/api/stat'
+import { QueryProfitReq, QueryProfitMonthReq } from '@/request/api/stat'
 import LineChart from '@/views/components/LineChart.vue'
 
 const store = useStore()
@@ -165,7 +165,7 @@ function handleSearch() {
             let promises = categories.map(async (cate) => {
                 data.type = cate;
                 try {
-                    const res = await MockQueryProfitReq(data);
+                    const res = await QueryProfitReq(data);
                     categoryResult.push({ type: cate, count: res.data[0], profit: res.data[1] })
                 } catch (e) {
                     console.error(e)
@@ -174,12 +174,12 @@ function handleSearch() {
             await Promise.all(promises)
 
             // for line chart
-            const monthResult = []
+            let monthResult = []
             const months = []
             const startDate = new Date(data.start_time * 1000)
-            startDate.setMonth(startDate.getMonth() + 1)
+            // startDate.setMonth(startDate.getMonth() + 1)
             const endDate = new Date(data.end_time * 1000)
-            endDate.setMonth(endDate.getMonth() + 1)
+            // endDate.setMonth(endDate.getMonth() + 1)
             let curDate = new Date(startDate)
             while (curDate < endDate) {
                 months.push(curDate.getTime() / 1000)
@@ -191,13 +191,24 @@ function handleSearch() {
                 et.setMonth(et.getMonth() + 1)
                 et = et.getTime() / 1000
                 try {
-                    const res = await MockQueryProfitMonthReq({ start_time: st, end_time: et });
-                    monthResult.push(res)
+                    const res = await QueryProfitMonthReq({ start_time: st, end_time: et });
+                    let st_date = new Date(st * 1000);
+                    let et_date = new Date(et * 1000);
+                    let d = {
+                        date: st,
+                        date_str: st_date.toLocaleDateString() + "-" + et_date.toLocaleDateString(),
+                        count: res.data.count,
+                        agency_fee: res.data.agency_fee,
+                    }
+                    monthResult.push(d)
                 } catch (e) {
                     console.error(e)
                 }
             })
             await Promise.all(promises)
+            monthResult.sort((a, b) => {
+                return a.date - b.date
+            })
 
             // resolve result as table data and chart data
             tableData.value = []
@@ -218,11 +229,11 @@ function handleSearch() {
             let cd2 = []    // 中介费
             monthResult.forEach((mr) => {
                 cd1.push({
-                    label: mr.date,
+                    label: mr.date_str,
                     y: mr.count,
                 })
                 cd2.push({
-                    label: mr.date,
+                    label: mr.date_str,
                     y: mr.agency_fee,
                 })
             })
