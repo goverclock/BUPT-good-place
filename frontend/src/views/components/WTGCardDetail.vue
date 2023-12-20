@@ -197,7 +197,7 @@ const beginEditing = () => {
     form.type = props.detail.type
     form.desc = props.detail.description
     form.max_price = Number(props.detail.max_price)
-    // form.city = props.detail.city    // TODO: not working
+    // form.city = props.detail.city    // simply too complex to implement
     form.end_time = props.detail.end_time
 }
 
